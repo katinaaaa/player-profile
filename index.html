@@ -3157,27 +3157,82 @@
         }
 
         // ===== RENDER LIVE FEED =====
-        const FEED_EVENTS = [
-            { icon: ICN.crosshair, text: '<strong>s1mple</strong> got an ACE on Dust II', time: 'Just now' },
-            { icon: ICN.trophy, text: '<strong>Beaulo</strong> reached Champion #1 in R6 Siege', time: '2m ago' },
-            { icon: ICN.swords, text: '<strong>Ny9e.VLP</strong> won 5 matches in a row', time: '8m ago' },
-            { icon: ICN.flame, text: '<strong>ZywOo</strong> hit a 1.82 rating on Inferno', time: '15m ago' },
-            { icon: ICN.skull, text: '<strong>Shaiiko</strong> dropped 18 kills on Oregon', time: '22m ago' },
-            { icon: ICN.chart, text: '<strong>donk</strong> climbed to 3,248 ELO on FaceIt', time: '31m ago' },
-            { icon: ICN.gamepad, text: '<strong>NiKo</strong> queued for competitive matchmaking', time: '38m ago' },
-            { icon: ICN.shield, text: '<strong>Paluh</strong> clutched a 1v4 on Border', time: '45m ago' },
-            { icon: ICN.bolt, text: '<strong>Ny9e.VLP</strong> is now online', time: '52m ago' },
-            { icon: ICN.rifle, text: '<strong>s1mple</strong> hit 77% HS rate this session', time: '1h ago' },
-            { icon: ICN.medal, text: '<strong>Beaulo</strong> earned Ace Medal on Clubhouse', time: '1h ago' },
-            { icon: ICN.burst, text: '<strong>ZywOo</strong> won FaceIt match 13–4', time: '2h ago' },
+        const FEED_TEMPLATES = [
+            { icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> got an ACE on ${randMap('cs2')}` },
+            { icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> clutched a 1v${1 + Math.floor(Math.random() * 4)} on ${randMap('cs2')}` },
+            { icon: 'trophy', tpl: (p) => `<strong>${p}</strong> won ${2 + Math.floor(Math.random() * 6)} matches in a row` },
+            { icon: 'flame', tpl: (p) => `<strong>${p}</strong> hit a ${(1.2 + Math.random() * 0.8).toFixed(2)} rating on ${randMap('cs2')}` },
+            { icon: 'skull', tpl: (p) => `<strong>${p}</strong> dropped ${14 + Math.floor(Math.random() * 16)} kills on ${randMap('r6')}` },
+            { icon: 'chart', tpl: (p) => `<strong>${p}</strong> climbed to ${2800 + Math.floor(Math.random() * 600)} ELO on FaceIt` },
+            { icon: 'gamepad', tpl: (p) => `<strong>${p}</strong> queued for competitive matchmaking` },
+            { icon: 'shield', tpl: (p) => `<strong>${p}</strong> clutched a 1v${1 + Math.floor(Math.random() * 3)} on ${randMap('r6')}` },
+            { icon: 'bolt', tpl: (p) => `<strong>${p}</strong> is now online` },
+            { icon: 'rifle', tpl: (p) => `<strong>${p}</strong> hit ${50 + Math.floor(Math.random() * 30)}% HS rate this session` },
+            { icon: 'medal', tpl: (p) => `<strong>${p}</strong> earned MVP on ${randMap('any')}` },
+            { icon: 'burst', tpl: (p) => `<strong>${p}</strong> won FaceIt match 13–${Math.floor(Math.random() * 10)}` },
+            { icon: 'swords', tpl: (p) => `<strong>${p}</strong> finished ranked match ${4}–${Math.floor(Math.random() * 4)} on ${randMap('r6')}` },
+            { icon: 'trophy', tpl: (p) => `<strong>${p}</strong> reached a new rank milestone` },
+            { icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> got a 4K on ${randMap('cs2')}` },
+            { icon: 'flame', tpl: (p) => `<strong>${p}</strong> is on a ${3 + Math.floor(Math.random() * 8)} win streak` },
+            { icon: 'chart', tpl: (p) => `<strong>${p}</strong> gained ${10 + Math.floor(Math.random() * 35)} ELO this session` },
+            { icon: 'skull', tpl: (p) => `<strong>${p}</strong> scored a headshot-only round on ${randMap('cs2')}` },
+            { icon: 'gamepad', tpl: (p) => `<strong>${p}</strong> started a new ranked session` },
+            { icon: 'shield', tpl: (p) => `<strong>${p}</strong> planted the defuser in a 1v${1 + Math.floor(Math.random() * 2)} on ${randMap('r6')}` },
+            { icon: 'bolt', tpl: (p) => `<strong>${p}</strong> went offline` },
+            { icon: 'medal', tpl: (p) => `<strong>${p}</strong> hit ${(1.1 + Math.random() * 0.7).toFixed(2)} K/D this match` },
+            { icon: 'rifle', tpl: (p) => `<strong>${p}</strong> got an opening kill on ${randMap('any')}` },
+            { icon: 'burst', tpl: (p) => `<strong>${p}</strong> won a Hub match on ${randMap('r6')}` },
         ];
+        const CS2_MAPS = ['Dust II', 'Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Vertigo'];
+        const R6_MAPS = ['Oregon', 'Border', 'Clubhouse', 'Consulate', 'Coastline', 'Kafe', 'Chalet', 'Villa'];
+        function randMap(g) { if (g === 'r6') return R6_MAPS[Math.floor(Math.random() * R6_MAPS.length)]; if (g === 'cs2') return CS2_MAPS[Math.floor(Math.random() * CS2_MAPS.length)]; return Math.random() > .5 ? CS2_MAPS[Math.floor(Math.random() * CS2_MAPS.length)] : R6_MAPS[Math.floor(Math.random() * R6_MAPS.length)]; }
+        function randPlayer() { return PLAYERS[Math.floor(Math.random() * PLAYERS.length)]; }
+        function genEvent() { const t = FEED_TEMPLATES[Math.floor(Math.random() * FEED_TEMPLATES.length)]; const p = randPlayer(); return { icon: ICN[t.icon], text: t.tpl(p.name + (p.clan ? '.' + p.clan : '')) }; }
+
+        let liveFeedTimer = null;
+        const liveEvents = [];
+        // Seed initial events
+        for (let i = 0; i < 8; i++) liveEvents.push({ ...genEvent(), time: [1, 2, 4, 7, 11, 16, 22, 30][i] + 'm ago' });
+
         function renderLive() {
             return `<div class="section">
-    <div class="section-head"><div><div class="section-title">Live <span>Feed</span></div><div class="section-sub">Real-time activity stream</div></div></div>
+    <div class="section-head"><div><div class="section-title">Live <span>Feed</span></div><div class="section-sub">Real-time activity stream</div></div><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 2s infinite"></div><span style="font-family:var(--font-m);font-size:9px;color:var(--green);letter-spacing:2px">LIVE</span></div></div>
     <div style="display:flex;flex-direction:column;gap:8px" id="liveFeed">
-      ${FEED_EVENTS.map((e, i) => `<div class="feed-item${i === 0 ? ' feed-new' : ''}" style="animation-delay:${i * 0.08}s"><div class="feed-icon">${e.icon}</div><div class="feed-text">${e.text}</div><div class="feed-time">${e.time}</div></div>`).join('')}
+      ${liveEvents.map((e, i) => `<div class="feed-item${i === 0 ? ' feed-new' : ''}" style="animation-delay:${i * 0.08}s"><div class="feed-icon">${e.icon}</div><div class="feed-text">${e.text}</div><div class="feed-time">${e.time}</div></div>`).join('')}
     </div>
   </div>`;
+        }
+
+        function startLiveFeed() {
+            if (liveFeedTimer) clearTimeout(liveFeedTimer);
+            function tick() {
+                const feed = document.getElementById('liveFeed');
+                if (!feed) { liveFeedTimer = null; return; }
+                // Generate new event
+                const ev = genEvent();
+                ev.time = 'Just now';
+                // Age existing times
+                liveEvents.forEach(e => {
+                    if (e.time === 'Just now') e.time = '1m ago';
+                    else { const m = parseInt(e.time); if (!isNaN(m)) e.time = (m + Math.floor(Math.random() * 3) + 1) + 'm ago'; }
+                });
+                liveEvents.unshift(ev);
+                if (liveEvents.length > 15) liveEvents.pop();
+                // Animate in new item
+                const newItem = document.createElement('div');
+                newItem.className = 'feed-item feed-new';
+                newItem.innerHTML = `<div class="feed-icon">${ev.icon}</div><div class="feed-text">${ev.text}</div><div class="feed-time">${ev.time}</div>`;
+                newItem.style.opacity = '0'; newItem.style.transform = 'translateY(-20px)';
+                feed.prepend(newItem);
+                requestAnimationFrame(() => { newItem.style.transition = 'all .4s ease'; newItem.style.opacity = '1'; newItem.style.transform = 'translateY(0)'; });
+                // Update times on existing items
+                [...feed.children].forEach((el, i) => { const timeEl = el.querySelector('.feed-time'); if (timeEl && liveEvents[i]) timeEl.textContent = liveEvents[i].time; });
+                // Remove overflow
+                while (feed.children.length > 15) feed.removeChild(feed.lastChild);
+                // Random interval 3-8 seconds
+                liveFeedTimer = setTimeout(tick, 3000 + Math.random() * 5000);
+            }
+            liveFeedTimer = setTimeout(tick, 2000 + Math.random() * 3000);
         }
 
         // ===== RADAR CHART =====
@@ -3230,9 +3285,10 @@
                 }, 300);
             }
             if (route === 'h2h') { setTimeout(() => { document.querySelectorAll('.h2h-fill').forEach(b => { b.style.width = b.dataset.w + '%'; }); }, 200); }
+            if (route === 'live') { startLiveFeed(); }
             if (route === 'home') {
                 const feed = document.getElementById('liveFeedHome');
-                if (feed) feed.innerHTML = FEED_EVENTS.slice(0, 5).map((e, i) => `<div class="feed-item" style="animation-delay:${i * 0.1}s"><div class="feed-icon">${e.icon}</div><div class="feed-text">${e.text}</div><div class="feed-time">${e.time}</div></div>`).join('');
+                if (feed) feed.innerHTML = liveEvents.slice(0, 5).map((e, i) => `<div class="feed-item" style="animation-delay:${i * 0.1}s"><div class="feed-icon">${e.icon}</div><div class="feed-text">${e.text}</div><div class="feed-time">${e.time}</div></div>`).join('');
             }
         }
 
