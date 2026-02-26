@@ -1,0 +1,3340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANGUARD — Elite Tactical Stats</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;600;700&family=Rajdhani:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --red: #c0392b;
+            --red-bright: #e74c3c;
+            --red-dim: #7b1e14;
+            --red-glow: rgba(192, 57, 43, .15);
+            --green: #2ecc71;
+            --bg: #080808;
+            --bg-card: #0e0e0e;
+            --bg-card2: #121212;
+            --border: rgba(192, 57, 43, .2);
+            --border-bright: rgba(192, 57, 43, .5);
+            --text: #e8e8e8;
+            --text-dim: #555;
+            --text-mid: #888;
+            --white: #fff;
+            --nav-h: 52px;
+            --max-w: 1100px;
+            --font-d: 'Bebas Neue', sans-serif;
+            --font-m: 'JetBrains Mono', monospace;
+            --font-b: 'Rajdhani', sans-serif
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-b);
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: crosshair
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: .4
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .03) 2px, rgba(0, 0, 0, .03) 4px);
+            pointer-events: none;
+            z-index: 9998
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--red-dim);
+            border-radius: 2px
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        button {
+            cursor: pointer;
+            font-family: var(--font-b)
+        }
+
+        /* NAV */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            height: var(--nav-h);
+            background: rgba(8, 8, 8, .94);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            gap: 16px
+        }
+
+        .nav-brand {
+            font-family: var(--font-d);
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: var(--white);
+            cursor: pointer
+        }
+
+        .nav-brand span {
+            color: var(--red-bright)
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2px;
+            margin-left: 24px
+        }
+
+        .nav-link {
+            font-family: var(--font-m);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 8px 14px;
+            border-radius: 4px;
+            transition: .2s;
+            cursor: pointer
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--text);
+            background: rgba(192, 57, 43, .08)
+        }
+
+        .nav-link.active {
+            color: var(--red-bright);
+            border-bottom: 2px solid var(--red-bright)
+        }
+
+        .nav-search {
+            position: relative;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 10px;
+            width: 220px;
+            transition: .3s
+        }
+
+        .nav-search:focus-within {
+            border-color: var(--border-bright);
+            width: 280px
+        }
+
+        .nav-search input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: var(--font-m);
+            font-size: 10px;
+            padding: 7px 0;
+            width: 100%
+        }
+
+        .nav-search input::placeholder {
+            color: var(--text-dim)
+        }
+
+        .nav-search-kbd {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            background: rgba(255, 255, 255, .04);
+            padding: 2px 5px;
+            border-radius: 2px;
+            border: 1px solid var(--border)
+        }
+
+        .search-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .6)
+        }
+
+        .search-dropdown.active {
+            display: block
+        }
+
+        .sr-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: .2s;
+            border-bottom: 1px solid rgba(255, 255, 255, .03)
+        }
+
+        .sr-item:hover {
+            background: rgba(192, 57, 43, .06)
+        }
+
+        .sr-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--red-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-d);
+            font-size: 12px;
+            color: var(--red-bright);
+            flex-shrink: 0
+        }
+
+        .sr-name {
+            font-family: var(--font-m);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text)
+        }
+
+        .sr-meta {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim)
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px
+        }
+
+        .nav-status::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green);
+            animation: blink 2s infinite
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .3
+            }
+        }
+
+        .mobile-btn {
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+            padding: 8px;
+            background: none;
+            border: none
+        }
+
+        .mobile-btn span {
+            width: 16px;
+            height: 1.5px;
+            background: var(--text-mid);
+            border-radius: 1px
+        }
+
+        /* APP */
+        .app {
+            min-height: calc(100vh - var(--nav-h));
+            padding-top: var(--nav-h);
+            position: relative;
+            z-index: 1
+        }
+
+        #pageContent {
+            animation: pageIn .4s ease
+        }
+
+        @keyframes pageIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 2px 0 var(--red-bright), -2px 0 #0ff
+            }
+
+            20% {
+                text-shadow: -2px 0 var(--red-bright), 2px 0 #0ff
+            }
+
+            40% {
+                text-shadow: 2px 2px var(--red-bright), -2px -2px #0ff
+            }
+
+            60% {
+                text-shadow: -1px 0 var(--red-bright), 1px 0 #0ff
+            }
+
+            80% {
+                text-shadow: 2px -1px var(--red-bright), -2px 1px #0ff
+            }
+
+            100% {
+                text-shadow: 0 0 var(--red-bright), 0 0 #0ff
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(192, 57, 43, .4)
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(192, 57, 43, 0)
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity .6s, transform .6s
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 24px;
+            overflow: hidden
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(192, 57, 43, .1) 0%, transparent 70%)
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(192, 57, 43, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(192, 57, 43, .04) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black, transparent)
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2
+        }
+
+        .hero-tag {
+            font-family: var(--font-m);
+            font-size: 11px;
+            letter-spacing: 5px;
+            color: var(--red);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            animation: fadeUp .8s ease both
+        }
+
+        .hero-title {
+            font-family: var(--font-d);
+            font-size: clamp(60px, 10vw, 120px);
+            letter-spacing: 6px;
+            color: var(--white);
+            line-height: .9;
+            text-shadow: 0 0 60px rgba(192, 57, 43, .3);
+            animation: fadeUp .8s .1s ease both
+        }
+
+        .hero-title span {
+            color: var(--red-bright);
+            text-shadow: 0 0 40px rgba(231, 76, 60, .6)
+        }
+
+        .hero-title:hover {
+            animation: glitch .3s ease
+        }
+
+        .hero-sub {
+            font-family: var(--font-m);
+            font-size: 12px;
+            color: var(--text-mid);
+            letter-spacing: 3px;
+            margin-top: 16px;
+            animation: fadeUp .8s .2s ease both
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            margin-top: 40px;
+            animation: fadeUp .8s .3s ease both
+        }
+
+        .hero-stat {
+            text-align: center
+        }
+
+        .hero-stat-val {
+            font-family: var(--font-d);
+            font-size: 36px;
+            color: var(--red-bright);
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(231, 76, 60, .4)
+        }
+
+        .hero-stat-lbl {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 4px
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 40px;
+            animation: fadeUp .8s .4s ease both
+        }
+
+        .btn {
+            font-family: var(--font-m);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            border-radius: 4px;
+            border: 1px solid var(--border-bright);
+            color: var(--red-bright);
+            background: rgba(192, 57, 43, .06);
+            transition: .3s;
+            cursor: pointer
+        }
+
+        .btn:hover {
+            background: rgba(192, 57, 43, .15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--red-glow)
+        }
+
+        .btn-fill {
+            background: var(--red);
+            color: var(--white);
+            border-color: var(--red)
+        }
+
+        .btn-fill:hover {
+            background: var(--red-bright)
+        }
+
+        /* SECTION */
+        .section {
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 60px 24px
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px
+        }
+
+        .section-title {
+            font-family: var(--font-d);
+            font-size: 28px;
+            letter-spacing: 5px;
+            color: var(--white)
+        }
+
+        .section-title span {
+            color: var(--red-bright)
+        }
+
+        .section-sub {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            text-transform: uppercase
+        }
+
+        /* DIVIDER */
+        .gdiv {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 24px
+        }
+
+        .gdivl {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--border-bright), transparent)
+        }
+
+        .gdivl.r {
+            background: linear-gradient(270deg, var(--border-bright), transparent)
+        }
+
+        .gdivn {
+            font-family: var(--font-d);
+            font-size: 13px;
+            letter-spacing: 5px;
+            color: var(--text-dim);
+            white-space: nowrap
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: .3s
+        }
+
+        .card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 0 30px var(--red-glow);
+            transform: translateY(-3px)
+        }
+
+        /* PLAYER GRID */
+        .players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px
+        }
+
+        .player-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: .3s;
+            position: relative;
+            overflow: hidden
+        }
+
+        .player-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 0 30px var(--red-glow);
+            transform: translateY(-3px)
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red), transparent);
+            opacity: 0;
+            transition: .3s
+        }
+
+        .player-card:hover::before {
+            opacity: 1
+        }
+
+        .pc-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px
+        }
+
+        .pc-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--red-dim), var(--red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-d);
+            font-size: 16px;
+            color: var(--white);
+            flex-shrink: 0;
+            border: 2px solid var(--border-bright)
+        }
+
+        .pc-name {
+            font-family: var(--font-d);
+            font-size: 20px;
+            letter-spacing: 2px;
+            color: var(--white)
+        }
+
+        .pc-clan {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--red);
+            letter-spacing: 2px
+        }
+
+        .pc-verified {
+            font-size: 10px;
+            margin-left: 4px
+        }
+
+        .pc-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px
+        }
+
+        .pc-stat-lbl {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .pc-stat-val {
+            font-family: var(--font-d);
+            font-size: 20px;
+            color: var(--red-bright);
+            letter-spacing: 1px;
+            line-height: 1
+        }
+
+        .pc-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px
+        }
+
+        .pc-tag {
+            font-family: var(--font-m);
+            font-size: 7px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 6px;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            background: rgba(192, 57, 43, .04)
+        }
+
+        .pc-online {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 6px var(--green)
+        }
+
+        /* LEADERBOARD */
+        .lb-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 20px
+        }
+
+        .lb-tab {
+            font-family: var(--font-m);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .lb-tab.active {
+            background: rgba(192, 57, 43, .1);
+            border-color: var(--border-bright);
+            color: var(--red-bright)
+        }
+
+        .lb-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 4px
+        }
+
+        .lb-table th {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            padding: 8px 12px;
+            text-align: left;
+            cursor: pointer;
+            user-select: none;
+            transition: .2s
+        }
+
+        .lb-table th:hover {
+            color: var(--text)
+        }
+
+        .lb-table td {
+            padding: 10px 12px;
+            background: var(--bg-card);
+            font-family: var(--font-m);
+            font-size: 12px;
+            color: var(--text);
+            transition: .2s
+        }
+
+        .lb-table tr:hover td {
+            background: var(--bg-card2);
+            border-color: var(--border-bright)
+        }
+
+        .lb-table td:first-child {
+            border-radius: 6px 0 0 6px
+        }
+
+        .lb-table td:last-child {
+            border-radius: 0 6px 6px 0
+        }
+
+        .lb-rank {
+            font-family: var(--font-d);
+            font-size: 20px;
+            color: var(--text-dim);
+            width: 40px;
+            text-align: center
+        }
+
+        .lb-rank.top1 {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, .5)
+        }
+
+        .lb-rank.top2 {
+            color: #c0c0c0;
+            text-shadow: 0 0 10px rgba(192, 192, 192, .3)
+        }
+
+        .lb-rank.top3 {
+            color: #cd7f32;
+            text-shadow: 0 0 10px rgba(205, 127, 50, .3)
+        }
+
+        .lb-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer
+        }
+
+        .lb-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--red-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-d);
+            font-size: 11px;
+            color: var(--red-bright);
+            flex-shrink: 0
+        }
+
+        .lb-name {
+            font-weight: 600;
+            font-size: 12px
+        }
+
+        .lb-clan-tag {
+            font-size: 9px;
+            color: var(--red);
+            margin-left: 4px
+        }
+
+        .lb-val {
+            font-family: var(--font-m);
+            font-size: 11px
+        }
+
+        .lb-val.hot {
+            color: var(--red-bright)
+        }
+
+        /* PROFILE */
+        .profile-header {
+            position: relative;
+            overflow: hidden;
+            padding: 60px 24px 40px
+        }
+
+        .profile-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(192, 57, 43, .12) 0%, transparent 70%), linear-gradient(180deg, #0a0000 0%, var(--bg) 100%)
+        }
+
+        .profile-grid-bg {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(192, 57, 43, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(192, 57, 43, .05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: linear-gradient(180deg, transparent, rgba(0, 0, 0, .3) 30%, transparent)
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 2;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            gap: 40px
+        }
+
+        .profile-name {
+            font-family: var(--font-d);
+            font-size: clamp(48px, 7vw, 80px);
+            letter-spacing: 4px;
+            color: var(--white);
+            text-shadow: 0 0 50px rgba(192, 57, 43, .3);
+            line-height: .9
+        }
+
+        .profile-name em {
+            font-style: normal;
+            color: var(--red-bright);
+            text-shadow: 0 0 30px rgba(231, 76, 60, .7)
+        }
+
+        .profile-sub {
+            font-family: var(--font-m);
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: var(--red);
+            text-transform: uppercase;
+            margin-top: 10px
+        }
+
+        .profile-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--text-mid);
+            letter-spacing: 2px
+        }
+
+        .profile-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green);
+            animation: blink 2s infinite
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--red), var(--red-dim), transparent);
+            position: relative
+        }
+
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: var(--red-bright);
+            filter: blur(4px)
+        }
+
+        /* OVERVIEW STRIP */
+        .ovstrip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px
+        }
+
+        .ovc {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: .3s
+        }
+
+        .ovc:first-child {
+            border-radius: 8px 0 0 8px
+        }
+
+        .ovc:last-child {
+            border-radius: 0 8px 8px 0
+        }
+
+        .ovc:hover {
+            border-color: var(--border-bright);
+            transform: translateY(-2px)
+        }
+
+        .ovc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red), transparent);
+            opacity: 0;
+            transition: .3s
+        }
+
+        .ovc:hover::before {
+            opacity: 1
+        }
+
+        .ovl {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 4px
+        }
+
+        .ovv {
+            font-family: var(--font-d);
+            font-size: 30px;
+            color: var(--red-bright);
+            letter-spacing: 2px;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(231, 76, 60, .4)
+        }
+
+        .ovs {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            margin-top: 3px
+        }
+
+        /* GAME SECTION */
+        .gsec {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: .3s
+        }
+
+        .gsec:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 0 40px var(--red-glow)
+        }
+
+        .gshead {
+            padding: 20px 24px;
+            background: linear-gradient(135deg, rgba(192, 57, 43, .07) 0%, transparent 60%);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .gsname {
+            font-family: var(--font-d);
+            font-size: 30px;
+            letter-spacing: 4px;
+            color: var(--white)
+        }
+
+        .gstag {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--red);
+            text-transform: uppercase;
+            margin-top: 3px
+        }
+
+        .gsrank {
+            text-align: right
+        }
+
+        .gsrmain {
+            font-family: var(--font-d);
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: var(--red-bright);
+            text-shadow: 0 0 20px rgba(231, 76, 60, .5)
+        }
+
+        .gsrsub {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            margin-top: 2px
+        }
+
+        .gsbody {
+            display: grid;
+            grid-template-columns: 1fr 220px
+        }
+
+        .gsleft {
+            padding: 24px;
+            border-right: 1px solid var(--border)
+        }
+
+        .srow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 20px
+        }
+
+        .sbl {
+            font-family: var(--font-m);
+            font-size: 8px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 4px
+        }
+
+        .sbv {
+            font-family: var(--font-b);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1
+        }
+
+        .sbv.hot {
+            color: var(--red-bright);
+            text-shadow: 0 0 12px rgba(231, 76, 60, .4)
+        }
+
+        .sbc {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            margin-top: 2px
+        }
+
+        .pslbl {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 8px
+        }
+
+        .psrow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px
+        }
+
+        .pstag {
+            font-family: var(--font-m);
+            font-size: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 3px;
+            border: 1px solid var(--border-bright);
+            color: var(--red-bright);
+            background: rgba(192, 57, 43, .06)
+        }
+
+        .gsright {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px
+        }
+
+        .rlbl {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase
+        }
+
+        /* LETHALITY */
+        .lisec {
+            background: var(--bg-card);
+            border: 1px solid var(--border-bright);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .lisec::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(192, 57, 43, .05) 0%, transparent 70%);
+            pointer-events: none
+        }
+
+        .lihead {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(192, 57, 43, .08) 0%, transparent 60%)
+        }
+
+        .lititle {
+            font-family: var(--font-d);
+            font-size: 22px;
+            letter-spacing: 5px;
+            color: var(--red-bright);
+            text-shadow: 0 0 20px rgba(231, 76, 60, .4)
+        }
+
+        .lisub {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            margin-top: 2px
+        }
+
+        .licls {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: var(--red);
+            border: 1px solid var(--border-bright);
+            padding: 4px 10px;
+            border-radius: 3px
+        }
+
+        .libody {
+            padding: 28px 24px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 32px;
+            align-items: center
+        }
+
+        .scwrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center
+        }
+
+        .sccircle {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            flex-shrink: 0
+        }
+
+        .sccircle svg {
+            transform: rotate(-90deg);
+            width: 140px;
+            height: 140px
+        }
+
+        .scbg {
+            fill: none;
+            stroke: rgba(255, 255, 255, .04);
+            stroke-width: 8
+        }
+
+        .scfill {
+            fill: none;
+            stroke: url(#rg);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 358;
+            stroke-dashoffset: 358;
+            transition: stroke-dashoffset 2s cubic-bezier(.16, 1, .3, 1);
+            filter: drop-shadow(0 0 8px rgba(231, 76, 60, .6))
+        }
+
+        .scinner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center
+        }
+
+        .scnum {
+            font-family: var(--font-d);
+            font-size: 44px;
+            color: var(--white);
+            letter-spacing: 2px;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(231, 76, 60, .4)
+        }
+
+        .scmax {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 2px
+        }
+
+        .sctier {
+            font-family: var(--font-d);
+            font-size: 16px;
+            letter-spacing: 4px;
+            color: var(--red-bright);
+            text-align: center;
+            margin-top: 8px;
+            text-shadow: 0 0 15px rgba(231, 76, 60, .5)
+        }
+
+        .libreak {
+            display: flex;
+            flex-direction: column;
+            gap: 10px
+        }
+
+        .lirow {
+            display: grid;
+            grid-template-columns: 160px 1fr 44px 44px;
+            align-items: center;
+            gap: 10px
+        }
+
+        .lillbl {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-mid);
+            letter-spacing: 1px
+        }
+
+        .litrack {
+            height: 3px;
+            background: rgba(255, 255, 255, .04);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        .lifill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--red-dim), var(--red-bright));
+            width: 0;
+            transition: width 1.4s cubic-bezier(.16, 1, .3, 1);
+            box-shadow: 0 0 6px var(--red)
+        }
+
+        .liwt {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            text-align: right
+        }
+
+        .lisc {
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--red-bright);
+            text-align: right;
+            font-weight: 700
+        }
+
+        .tierladder {
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 4px
+        }
+
+        .tiers {
+            flex: 1;
+            padding: 8px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, .04);
+            text-align: center
+        }
+
+        .tiers.on {
+            border-color: var(--border-bright);
+            background: rgba(192, 57, 43, .08);
+            box-shadow: 0 0 16px rgba(192, 57, 43, .15)
+        }
+
+        .tsn {
+            font-family: var(--font-d);
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: var(--text-dim)
+        }
+
+        .tiers.on .tsn {
+            color: var(--red-bright);
+            text-shadow: 0 0 10px rgba(231, 76, 60, .4)
+        }
+
+        .tsr {
+            font-family: var(--font-m);
+            font-size: 7px;
+            color: var(--text-dim);
+            margin-top: 2px;
+            opacity: .6
+        }
+
+        /* MATCH HISTORY */
+        .match {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: .2s
+        }
+
+        .match:hover {
+            border-color: var(--border-bright)
+        }
+
+        .match-result {
+            font-family: var(--font-d);
+            font-size: 18px;
+            width: 28px;
+            text-align: center
+        }
+
+        .match-result.w {
+            color: var(--green)
+        }
+
+        .match-result.l {
+            color: var(--red-bright)
+        }
+
+        .match-map {
+            font-family: var(--font-m);
+            font-size: 11px;
+            font-weight: 600;
+            flex: 1
+        }
+
+        .match-score {
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-mid)
+        }
+
+        .match-kda {
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--text-dim)
+        }
+
+        .match-rating {
+            font-family: var(--font-m);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--red-bright)
+        }
+
+        .match-time {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            width: 80px;
+            text-align: right
+        }
+
+        /* MATCH HISTORY FILTERS */
+        .mh-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap
+        }
+
+        .mh-filter-group {
+            display: flex;
+            gap: 2px;
+            background: rgba(255, 255, 255, .02);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 3px;
+        }
+
+        .mh-filter-label {
+            font-family: var(--font-m);
+            font-size: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            padding: 0 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .mh-btn {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border: none;
+            border-radius: 4px;
+            background: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: .2s;
+            white-space: nowrap
+        }
+
+        .mh-btn:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, .04)
+        }
+
+        .mh-btn.active {
+            background: rgba(192, 57, 43, .12);
+            color: var(--red-bright);
+            border: 1px solid var(--border-bright)
+        }
+
+        .mh-count {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            margin-left: auto;
+            letter-spacing: 1px
+        }
+
+        .match-queue {
+            font-family: var(--font-m);
+            font-size: 7px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 3px;
+            white-space: nowrap;
+            flex-shrink: 0
+        }
+
+        .match-queue.faceit {
+            background: rgba(255, 85, 0, .12);
+            color: #ff6b2b;
+            border: 1px solid rgba(255, 85, 0, .25)
+        }
+
+        .match-queue.mm {
+            background: rgba(46, 204, 113, .10);
+            color: var(--green);
+            border: 1px solid rgba(46, 204, 113, .20)
+        }
+
+        .match-queue.hub {
+            background: rgba(155, 89, 182, .12);
+            color: #b57edc;
+            border: 1px solid rgba(155, 89, 182, .25)
+        }
+
+        .match-queue.ranked {
+            background: rgba(52, 152, 219, .12);
+            color: #5dade2;
+            border: 1px solid rgba(52, 152, 219, .25)
+        }
+
+        .mh-empty {
+            text-align: center;
+            padding: 30px;
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            border: 1px dashed var(--border);
+            border-radius: 6px
+        }
+
+        .match-game-icon {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        /* FAQ */
+
+        /* WARNING MODAL */
+        .warn-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .75);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            animation: warnFadeIn .3s ease
+        }
+
+        @keyframes warnFadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        .warn-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-bright);
+            border-radius: 10px;
+            max-width: 480px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(192, 57, 43, .15), 0 20px 60px rgba(0, 0, 0, .5);
+            animation: warnSlideIn .4s ease
+        }
+
+        @keyframes warnSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.96)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+        }
+
+        .warn-header {
+            background: linear-gradient(135deg, rgba(192, 57, 43, .15), rgba(192, 57, 43, .05));
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border)
+        }
+
+        .warn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(192, 57, 43, .15);
+            border: 1px solid var(--border-bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0
+        }
+
+        .warn-title {
+            font-family: var(--font-d);
+            font-size: 20px;
+            letter-spacing: 3px;
+            color: var(--red-bright)
+        }
+
+        .warn-body {
+            padding: 20px 24px
+        }
+
+        .warn-text {
+            font-family: var(--font-m);
+            font-size: 11px;
+            line-height: 1.8;
+            color: var(--text-mid);
+            letter-spacing: .3px
+        }
+
+        .warn-text strong {
+            color: var(--red-bright)
+        }
+
+        .warn-date {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border)
+        }
+
+        .warn-footer {
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            background: rgba(0, 0, 0, .2)
+        }
+
+        .warn-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer
+        }
+
+        .warn-check input[type="checkbox"] {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--border-bright);
+            border-radius: 3px;
+            background: rgba(192, 57, 43, .06);
+            cursor: pointer;
+            position: relative;
+            transition: .2s;
+            flex-shrink: 0
+        }
+
+        .warn-check input[type="checkbox"]:checked {
+            background: var(--red);
+            border-color: var(--red-bright)
+        }
+
+        .warn-check input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 11px;
+            color: var(--white);
+            font-weight: 700
+        }
+
+        .warn-check-label {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            user-select: none
+        }
+
+        .warn-ok {
+            font-family: var(--font-d);
+            font-size: 16px;
+            letter-spacing: 3px;
+            padding: 8px 28px;
+            background: var(--red);
+            color: var(--white);
+            border: 1px solid var(--red-bright);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .warn-ok:hover {
+            background: var(--red-bright);
+            box-shadow: 0 0 20px rgba(231, 76, 60, .3)
+        }
+
+        .faq-hero {
+            text-align: center;
+            padding: 60px 24px 30px;
+            position: relative
+        }
+
+        .faq-hero-title {
+            font-family: var(--font-d);
+            font-size: clamp(36px, 6vw, 56px);
+            letter-spacing: 6px;
+            color: var(--white);
+            text-shadow: 0 0 40px rgba(192, 57, 43, .3)
+        }
+
+        .faq-hero-title span {
+            color: var(--red-bright)
+        }
+
+        .faq-hero-sub {
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-mid);
+            letter-spacing: 3px;
+            margin-top: 12px
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: .3s
+        }
+
+        .faq-item:hover {
+            border-color: var(--border-bright)
+        }
+
+        .faq-item.open {
+            border-color: var(--border-bright);
+            box-shadow: 0 0 20px var(--red-glow)
+        }
+
+        .faq-q {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 18px 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: .2s
+        }
+
+        .faq-q:hover {
+            background: rgba(192, 57, 43, .04)
+        }
+
+        .faq-num {
+            font-family: var(--font-d);
+            font-size: 22px;
+            color: var(--red-dim);
+            min-width: 32px;
+            transition: .3s
+        }
+
+        .faq-item.open .faq-num {
+            color: var(--red-bright)
+        }
+
+        .faq-q-text {
+            font-family: var(--font-b);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+            letter-spacing: .5px
+        }
+
+        .faq-toggle {
+            font-family: var(--font-d);
+            font-size: 20px;
+            color: var(--red-dim);
+            transition: .3s;
+            flex-shrink: 0
+        }
+
+        .faq-item.open .faq-toggle {
+            color: var(--red-bright);
+            transform: rotate(45deg)
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .4s ease, padding .3s ease
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 600px
+        }
+
+        .faq-a-inner {
+            padding: 0 20px 20px 66px;
+            font-family: var(--font-m);
+            font-size: 11px;
+            line-height: 1.8;
+            color: var(--text-mid);
+            letter-spacing: .3px
+        }
+
+        .faq-a-inner strong {
+            color: var(--red-bright);
+            font-weight: 600
+        }
+
+        .faq-a-inner ul {
+            list-style: none;
+            padding: 8px 0;
+        }
+
+        .faq-a-inner ul li {
+            padding: 3px 0;
+            position: relative;
+            padding-left: 16px
+        }
+
+        .faq-a-inner ul li::before {
+            content: '›';
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-weight: 700
+        }
+
+        .faq-cat {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 14px;
+            margin-top: 30px;
+            padding-left: 2px
+        }
+
+        .faq-cat:first-child {
+            margin-top: 0
+        }
+
+        /* H2H */
+        .h2h-selector {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px
+        }
+
+        .h2h-pick {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 32px;
+            text-align: center;
+            min-width: 200px;
+            cursor: pointer;
+            transition: .3s
+        }
+
+        .h2h-pick:hover {
+            border-color: var(--border-bright)
+        }
+
+        .h2h-pick.selected {
+            border-color: var(--red-bright);
+            box-shadow: 0 0 20px var(--red-glow)
+        }
+
+        .h2h-vs {
+            font-family: var(--font-d);
+            font-size: 40px;
+            color: var(--red-dim);
+            letter-spacing: 4px
+        }
+
+        .h2h-name {
+            font-family: var(--font-d);
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: var(--white);
+            margin-top: 4px
+        }
+
+        .h2h-clan {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--red);
+            letter-spacing: 2px
+        }
+
+        .h2h-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 700px;
+            margin: 0 auto
+        }
+
+        .h2h-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 50px 50px 1fr 80px;
+            align-items: center;
+            gap: 8px
+        }
+
+        .h2h-lbl {
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--text-mid);
+            text-align: center;
+            grid-column: 1/-1;
+            margin-bottom: -6px
+        }
+
+        .h2h-val {
+            font-family: var(--font-d);
+            font-size: 20px;
+            letter-spacing: 1px
+        }
+
+        .h2h-val.left {
+            text-align: right;
+            color: var(--red-bright)
+        }
+
+        .h2h-val.right {
+            text-align: left;
+            color: #e74c3c
+        }
+
+        .h2h-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, .04);
+            border-radius: 3px;
+            overflow: hidden
+        }
+
+        .h2h-bar.left {
+            direction: rtl
+        }
+
+        .h2h-fill {
+            height: 100%;
+            border-radius: 3px;
+            width: 0;
+            transition: width 1.2s cubic-bezier(.16, 1, .3, 1)
+        }
+
+        .h2h-fill.left {
+            background: linear-gradient(90deg, var(--red-bright), var(--red-dim))
+        }
+
+        .h2h-fill.right {
+            background: linear-gradient(90deg, var(--red-dim), var(--red-bright))
+        }
+
+        .h2h-mid {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase
+        }
+
+        /* LIVE FEED */
+        .feed-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            animation: slideIn .4s ease both
+        }
+
+        .feed-icon {
+            font-size: 16px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(192, 57, 43, .08);
+            border-radius: 50%;
+            flex-shrink: 0;
+            color: var(--red-bright)
+        }
+
+        .feed-icon svg {
+            width: 16px;
+            height: 16px
+        }
+
+        .feed-text {
+            flex: 1;
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text)
+        }
+
+        .feed-text strong {
+            color: var(--red-bright)
+        }
+
+        .feed-time {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim)
+        }
+
+        .feed-new {
+            animation: pulse 2s infinite
+        }
+
+        /* FILTER BAR */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px
+        }
+
+        .filter-btn {
+            font-family: var(--font-m);
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .filter-btn.active {
+            border-color: var(--border-bright);
+            color: var(--red-bright);
+            background: rgba(192, 57, 43, .08)
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 20px 24px;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .ft {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 3px
+        }
+
+        .ft span {
+            color: var(--red)
+        }
+
+        /* APPLY FORM */
+        .apply-hero {
+            position: relative;
+            text-align: center;
+            padding: 80px 24px 40px;
+            overflow: hidden
+        }
+
+        .apply-hero-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 50% at 50% 30%, rgba(192, 57, 43, .08) 0%, transparent 70%)
+        }
+
+        .apply-hero-content {
+            position: relative;
+            z-index: 2
+        }
+
+        .apply-title {
+            font-family: var(--font-d);
+            font-size: clamp(40px, 6vw, 60px);
+            letter-spacing: 6px;
+            color: var(--white);
+            text-shadow: 0 0 40px rgba(192, 57, 43, .3)
+        }
+
+        .apply-title span {
+            color: var(--red-bright)
+        }
+
+        .apply-sub {
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-mid);
+            letter-spacing: 3px;
+            margin-top: 8px
+        }
+
+        .apply-form {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 24px 60px
+        }
+
+        .apply-step {
+            margin-bottom: 32px
+        }
+
+        .apply-step-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px
+        }
+
+        .apply-step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(192, 57, 43, .1);
+            border: 1px solid var(--border-bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-d);
+            font-size: 16px;
+            color: var(--red-bright);
+            flex-shrink: 0
+        }
+
+        .apply-step-title {
+            font-family: var(--font-d);
+            font-size: 18px;
+            letter-spacing: 3px;
+            color: var(--white)
+        }
+
+        .apply-step-desc {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px
+        }
+
+        .apply-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            transition: .3s
+        }
+
+        .apply-card:hover {
+            border-color: var(--border-bright);
+            box-shadow: 0 0 20px var(--red-glow)
+        }
+
+        .apply-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px
+        }
+
+        .apply-row.full {
+            grid-template-columns: 1fr
+        }
+
+        .apply-label {
+            display: block;
+            font-family: var(--font-m);
+            font-size: 8px;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            font-weight: 600
+        }
+
+        .apply-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: var(--font-m);
+            font-size: 11px;
+            outline: none;
+            transition: .2s
+        }
+
+        .apply-input:focus {
+            border-color: var(--border-bright);
+            box-shadow: 0 0 12px var(--red-glow)
+        }
+
+        .apply-input::placeholder {
+            color: var(--text-dim)
+        }
+
+        textarea.apply-input {
+            resize: vertical;
+            min-height: 80px
+        }
+
+        .apply-input.select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23555' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center
+        }
+
+        .apply-checks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px
+        }
+
+        .apply-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: .2s;
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            user-select: none
+        }
+
+        .apply-check:hover {
+            border-color: var(--border-bright);
+            color: var(--text)
+        }
+
+        .apply-check.selected {
+            border-color: var(--red-bright);
+            background: rgba(192, 57, 43, .08);
+            color: var(--red-bright)
+        }
+
+        .apply-check input {
+            display: none
+        }
+
+        .apply-submit {
+            display: flex;
+            justify-content: center;
+            margin-top: 32px
+        }
+
+        .apply-submit .btn {
+            padding: 14px 40px;
+            font-size: 12px;
+            letter-spacing: 3px
+        }
+
+        .apply-success {
+            text-align: center;
+            padding: 80px 24px;
+            animation: fadeUp .6s ease both
+        }
+
+        .apply-success-icon {
+            font-size: 60px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center
+        }
+
+        .apply-success-icon svg {
+            width: 32px;
+            height: 32px
+        }
+
+        .apply-success-title {
+            font-family: var(--font-d);
+            font-size: 36px;
+            letter-spacing: 4px;
+            color: var(--white)
+        }
+
+        .apply-success-sub {
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-mid);
+            letter-spacing: 2px;
+            margin-top: 8px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .apply-success-id {
+            font-family: var(--font-m);
+            font-size: 12px;
+            color: var(--red-bright);
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: rgba(192, 57, 43, .06);
+            border: 1px solid var(--border-bright);
+            border-radius: 6px;
+            display: inline-block;
+            letter-spacing: 2px
+        }
+
+        .apply-req {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 16px
+        }
+
+        .apply-req-item {
+            flex: 1;
+            min-width: 180px;
+            background: rgba(192, 57, 43, .04);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px;
+            text-align: center
+        }
+
+        .apply-req-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+            color: var(--red-bright);
+            display: flex;
+            justify-content: center
+        }
+
+        .apply-req-icon svg {
+            width: 24px;
+            height: 24px
+        }
+
+        .apply-req-title {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text);
+            letter-spacing: 2px;
+            text-transform: uppercase
+        }
+
+        .apply-req-desc {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            margin-top: 2px
+        }
+
+        @media(max-width:768px) {
+            .apply-row {
+                grid-template-columns: 1fr
+            }
+
+            .apply-checks {
+                flex-direction: column
+            }
+        }
+
+        /* RESPONSIVE */
+        @media(max-width:768px) {
+
+            .nav-links,
+            .nav-search,
+            .nav-status {
+                display: none
+            }
+
+            .mobile-btn {
+                display: flex
+            }
+
+            .ovstrip {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .ovc:first-child {
+                border-radius: 8px 0 0 0
+            }
+
+            .ovc:last-child {
+                border-radius: 0 0 8px 0
+            }
+
+            .gsbody {
+                grid-template-columns: 1fr
+            }
+
+            .gsleft {
+                border-right: none;
+                border-bottom: 1px solid var(--border)
+            }
+
+            .gsright {
+                padding: 16px
+            }
+
+            .srow {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .libody {
+                grid-template-columns: 1fr;
+                gap: 20px
+            }
+
+            .lirow {
+                grid-template-columns: 1fr auto auto;
+                grid-template-rows: auto auto
+            }
+
+            .lillbl {
+                grid-column: 1/-1
+            }
+
+            .tierladder {
+                flex-wrap: wrap
+            }
+
+            .tiers {
+                flex: 1 1 calc(33% - 4px)
+            }
+
+            .profile-content {
+                grid-template-columns: 1fr
+            }
+
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 20px
+            }
+
+            .h2h-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                text-align: center
+            }
+
+            .players-grid {
+                grid-template-columns: 1fr
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 8px
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav class="nav">
+        <div class="nav-brand" onclick="Router.navigate('#home')">VAN<span>GUARD</span></div>
+        <div class="nav-links" id="navLinks"></div>
+        <div class="nav-search">
+            <input type="text" id="searchInput" placeholder="Search players..." autocomplete="off">
+            <span class="nav-search-kbd">/</span>
+            <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+        <div class="nav-status">SYSTEM ACTIVE</div>
+        <button class="mobile-btn"
+            onclick="document.querySelector('.nav-links').classList.toggle('mob-show')"><span></span><span></span><span></span></button>
+    </nav>
+
+    <!-- WARNING MODAL -->
+    <div class="warn-overlay" id="warnModal" style="display:none">
+        <div class="warn-box">
+            <div class="warn-header">
+                <div class="warn-icon">⚠</div>
+                <div class="warn-title">DISCLAIMER</div>
+            </div>
+            <div class="warn-body">
+                <div class="warn-text">
+                    This is a <strong>mock / test website</strong> created for demonstration purposes only.
+                    Player stats, match data, ELO ratings, and rankings shown on this site are
+                    <strong>not real</strong> and may not be fully accurate.
+                    <br><br>
+                    This site is not affiliated with Valve, Ubisoft, FaceIt, or any game publisher.
+                    All player names are used for illustrative purposes only.
+                </div>
+                <div class="warn-date">Last updated — February 26, 2026</div>
+            </div>
+            <div class="warn-footer">
+                <label class="warn-check">
+                    <input type="checkbox" id="warnDontShow">
+                    <span class="warn-check-label">Do not show again</span>
+                </label>
+                <button class="warn-ok" onclick="dismissWarning()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SVG DEFS -->
+    <svg style="position:absolute;width:0;height:0">
+        <defs>
+            <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#7b1e14" />
+                <stop offset="100%" style="stop-color:#e74c3c" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- APP -->
+    <div class="app">
+        <div id="pageContent"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="ft">SYSTEM // <span>VANGUARD</span></div>
+        <div class="ft">EU · NA · R6 · CS2 · <span>TACTICAL</span></div>
+    </footer>
+
+    <script>
+        // ===== CUSTOM SVG ICONS =====
+        const ICN = {
+            crosshair: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="2"/></svg>`,
+            trophy: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 21h8m-4-4v4m-5-8a5 5 0 0 1-4-5V4h2a3 3 0 0 0 3 3m4 6a5 5 0 0 0 4-5V4h-2a3 3 0 0 1-3 3m1 6H11"/><path d="M7 4h10v4a5 5 0 0 1-10 0V4z"/></svg>`,
+            swords: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 19L19 5m0 0h-5m5 0v5M19 19L5 5m0 0h5M5 5v5"/></svg>`,
+            flame: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c-4-2.5-6-5.5-6-9 0-3 1.5-5 3-6.5.5 2 2 3.5 3 4 0-4 2-7 4-9 .5 2.5 1.5 4 3 5.5 1 1 2 3 2 5.5 0 3.5-2 6.5-6 9.5h-3z"/></svg>`,
+            skull: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="10" r="7"/><circle cx="9" cy="9" r="1.5" fill="currentColor"/><circle cx="15" cy="9" r="1.5" fill="currentColor"/><path d="M9 17v4m3-4v4m3-4v4M8.5 14c1.5 1 5 1 7 0"/></svg>`,
+            chart: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="4 18 8 12 12 15 16 8 20 4"/><line x1="4" y1="20" x2="20" y2="20"/><line x1="4" y1="4" x2="4" y2="20"/></svg>`,
+            gamepad: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="4"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="6" y1="12" x2="10" y2="12"/><circle cx="16" cy="10" r="1" fill="currentColor"/><circle cx="18" cy="12" r="1" fill="currentColor"/></svg>`,
+            shield: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l8 4v5c0 5.5-3.5 10-8 12-4.5-2-8-6.5-8-12V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>`,
+            bolt: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+            rifle: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h8l2-3h6l2 1v4h-4l-1-2H3z"/><path d="M6 12v5m4-5v3"/><circle cx="19" cy="12" r="1"/></svg>`,
+            medal: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="15" r="5"/><path d="M8.5 2h7L18 9l-6 3-6-3L8.5 2z"/><path d="M12 12v-2"/></svg>`,
+            burst: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 14.5 8 21 8.5 16 13 17.5 20 12 16.5 6.5 20 8 13 3 8.5 9.5 8"/></svg>`,
+            target: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>`,
+            bars: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="8" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="16" rx="1"/></svg>`,
+            link: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.5 1.5"/><path d="M14 11a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.5-1.5"/></svg>`,
+            check: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        };
+
+        // ===== PLAYER DATABASE =====
+        const PLAYERS = [
+            {
+                id: 'ny9e', name: 'Ny9e', clan: 'VLP', region: 'EU', tagline: 'Competitive FPS Player', online: true, verified: 'pro',
+                cs2: { rank: 'Global Elite', elo: 2847, kd: '2.70', wr: '59', hs: '52', kills: '18,420', matches: 1240 },
+                r6: { rank: 'Champion', rating: 5200, kd: '1.30', wr: '62', hs: '77', kills: '24,810', matches: 2180, globalRank: 32 },
+                radar: { cs2: [.88, .85, .74, .80, .95, .65], r6: [.92, .85, .78, .70, .88, .75] },
+                tags: { cs2: ['Entry Fragger', 'Clutch Player', 'Rifle Duelist', 'High Impact'], r6: ['Hard Fragger', 'Entry Pusher', 'Headshot Machine', 'Aggressive Roamer'] },
+                lethality: { score: 70.5, tier: 'Lethal', breakdown: [{ l: 'R6 Headshot %', w: .35, v: 77, s: 26.9 }, { l: 'R6 Win Rate', w: .20, v: 62, s: 12.4 }, { l: 'R6 K/D', w: .15, v: 43, s: 6.5 }, { l: 'CS2 K/D', w: .15, v: 90, s: 13.5 }, { l: 'FaceIt ELO', w: .10, v: 82, s: 8.2 }, { l: 'CS2 Win Rate', w: .05, v: 59, s: 3.0 }] },
+                matches: [
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Dust II', sc: '13–7', kda: '24/12/5', rt: '1.42', t: '2h ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Mirage', sc: '13–9', kda: '20/14/4', rt: '1.18', t: '4h ago' },
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Clubhouse', sc: '4–2', kda: '10/5/3', rt: '1.35', t: '6h ago' },
+                    { g: 'r6', q: 'hub', r: 'L', map: 'Oregon', sc: '2–4', kda: '7/8/2', rt: '0.92', t: 'Yesterday' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Inferno', sc: '13–11', kda: '26/18/5', rt: '1.31', t: 'Yesterday' },
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Consulate', sc: '4–1', kda: '9/3/4', rt: '1.55', t: '2 days ago' },
+                    { g: 'cs2', q: 'mm', r: 'L', map: 'Anubis', sc: '8–13', kda: '14/16/3', rt: '0.85', t: '2 days ago' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Kafe', sc: '4–3', kda: '11/7/2', rt: '1.22', t: '3 days ago' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Nuke', sc: '13–6', kda: '22/10/4', rt: '1.48', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 's1mple', name: 's1mple', clan: 'BC.G', region: 'EU East', tagline: 'The greatest of all time.', online: true, verified: 'pro',
+                cs2: { rank: 'Global Elite', elo: 4215, kd: '1.65', wr: '68', hs: '58', kills: '42,891', matches: 4210 },
+                r6: null, radar: { cs2: [.97, .90, .85, .88, .95, .72] },
+                tags: { cs2: ['AWP God', 'Entry Fragger', 'Clutch King', 'GOAT'] },
+                lethality: { score: 92.4, tier: 'Apex Predator', breakdown: [{ l: 'CS2 K/D', w: .40, v: 95, s: 38.0 }, { l: 'CS2 Win Rate', w: .25, v: 85, s: 21.2 }, { l: 'FaceIt ELO', w: .20, v: 98, s: 19.6 }, { l: 'CS2 HS%', w: .15, v: 72, s: 10.8 }] },
+                matches: [
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Dust II', sc: '13–3', kda: '26/6/3', rt: '1.82', t: '1h ago' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Nuke', sc: '13–9', kda: '24/13/5', rt: '1.45', t: '3h ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Mirage', sc: '13–5', kda: '28/8/3', rt: '1.68', t: '6h ago' },
+                    { g: 'cs2', q: 'faceit', r: 'L', map: 'Inferno', sc: '11–13', kda: '19/16/4', rt: '1.05', t: 'Yesterday' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Anubis', sc: '13–7', kda: '25/10/3', rt: '1.52', t: 'Yesterday' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Ancient', sc: '13–4', kda: '27/7/4', rt: '1.74', t: '2 days ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Dust II', sc: '13–10', kda: '22/14/5', rt: '1.30', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 'beaulo', name: 'Beaulo', clan: 'DZ', region: 'NA East', tagline: 'The R6 GOAT.', online: false, verified: 'pro',
+                cs2: null,
+                r6: { rank: 'Champion', rating: 5980, kd: '1.72', wr: '71', hs: '57', kills: '28,420', matches: 3210, globalRank: 1 },
+                radar: { r6: [.95, .92, .88, .85, .94, .82] },
+                tags: { r6: ['Aim God', 'Flex Player', 'Clutch Specialist', 'IGL'] },
+                lethality: { score: 94.1, tier: 'Apex Predator', breakdown: [{ l: 'R6 K/D', w: .35, v: 96, s: 33.6 }, { l: 'R6 Win Rate', w: .25, v: 89, s: 22.2 }, { l: 'R6 HS%', w: .20, v: 71, s: 14.2 }, { l: 'R6 Rating', w: .20, v: 95, s: 19.0 }] },
+                matches: [
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Clubhouse', sc: '4–1', kda: '12/3/4', rt: '1.92', t: '2h ago' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Oregon', sc: '4–3', kda: '10/6/3', rt: '1.28', t: '5h ago' },
+                    { g: 'r6', q: 'ranked', r: 'L', map: 'Kafe', sc: '3–4', kda: '8/7/2', rt: '1.05', t: 'Yesterday' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Border', sc: '4–2', kda: '11/5/3', rt: '1.42', t: 'Yesterday' },
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Chalet', sc: '4–0', kda: '9/2/5', rt: '1.85', t: '2 days ago' },
+                    { g: 'r6', q: 'hub', r: 'L', map: 'Consulate', sc: '3–4', kda: '7/6/2', rt: '0.95', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 'zywoo', name: 'ZywOo', clan: 'VIT', region: 'EU West', tagline: 'Precision incarnate.', online: true, verified: 'pro',
+                cs2: { rank: 'Global Elite', elo: 3842, kd: '1.58', wr: '66', hs: '55', kills: '38,210', matches: 3840 },
+                r6: null, radar: { cs2: [.94, .82, .83, .90, .92, .78] },
+                tags: { cs2: ['AWP Master', 'Passive Anchor', 'Multi-Kill King', 'Big Brain'] },
+                lethality: { score: 89.7, tier: 'Lethal', breakdown: [{ l: 'CS2 K/D', w: .40, v: 92, s: 36.8 }, { l: 'CS2 Win Rate', w: .25, v: 82, s: 20.5 }, { l: 'FaceIt ELO', w: .20, v: 97, s: 19.4 }, { l: 'CS2 HS%', w: .15, v: 69, s: 10.3 }] },
+                matches: [
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Inferno', sc: '13–8', kda: '22/12/4', rt: '1.38', t: '3h ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Anubis', sc: '13–5', kda: '20/8/4', rt: '1.52', t: '7h ago' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Nuke', sc: '13–10', kda: '21/14/5', rt: '1.25', t: 'Yesterday' },
+                    { g: 'cs2', q: 'faceit', r: 'L', map: 'Mirage', sc: '9–13', kda: '15/16/3', rt: '0.91', t: '2 days ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Dust II', sc: '13–4', kda: '24/7/3', rt: '1.65', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 'shaiiko', name: 'Shaiiko', clan: 'BDS', region: 'EU West', tagline: 'Mechanical genius.', online: true, verified: 'pro',
+                cs2: null,
+                r6: { rank: 'Champion', rating: 5840, kd: '1.68', wr: '70', hs: '54', kills: '32,180', matches: 3680, globalRank: 3 },
+                radar: { r6: [.93, .90, .86, .78, .91, .76] },
+                tags: { r6: ['Entry Fragger', 'Mechanical Beast', 'Flick God', 'Aggressive'] },
+                lethality: { score: 91.3, tier: 'Lethal', breakdown: [{ l: 'R6 K/D', w: .35, v: 94, s: 32.9 }, { l: 'R6 Win Rate', w: .25, v: 87, s: 21.7 }, { l: 'R6 HS%', w: .20, v: 68, s: 13.6 }, { l: 'R6 Rating', w: .20, v: 93, s: 18.6 }] },
+                matches: [
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Oregon', sc: '4–1', kda: '11/4/3', rt: '1.65', t: '1h ago' },
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Chalet', sc: '4–2', kda: '9/5/3', rt: '1.32', t: '4h ago' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Kafe', sc: '4–0', kda: '13/2/4', rt: '1.88', t: 'Yesterday' },
+                    { g: 'r6', q: 'ranked', r: 'L', map: 'Border', sc: '2–4', kda: '6/7/2', rt: '0.82', t: '2 days ago' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Clubhouse', sc: '4–3', kda: '10/8/3', rt: '1.15', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 'niko', name: 'NiKo', clan: 'FLCN', region: 'EU West', tagline: 'Headshot machine.', online: false, verified: 'pro',
+                cs2: { rank: 'Global Elite', elo: 3516, kd: '1.52', wr: '66', hs: '61', kills: '45,120', matches: 4580 },
+                r6: null, radar: { cs2: [.93, .88, .82, .75, .90, .70] },
+                tags: { cs2: ['Rifler', 'Headshot King', 'IGL', 'Veteran'] },
+                lethality: { score: 87.2, tier: 'Lethal', breakdown: [{ l: 'CS2 K/D', w: .40, v: 88, s: 35.2 }, { l: 'CS2 Win Rate', w: .25, v: 82, s: 20.5 }, { l: 'FaceIt ELO', w: .20, v: 94, s: 18.8 }, { l: 'CS2 HS%', w: .15, v: 76, s: 11.4 }] },
+                matches: [
+                    { g: 'cs2', q: 'faceit', r: 'L', map: 'Nuke', sc: '10–13', kda: '16/18/4', rt: '0.88', t: '5h ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Dust II', sc: '13–11', kda: '25/15/5', rt: '1.24', t: 'Yesterday' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Inferno', sc: '13–6', kda: '23/9/4', rt: '1.55', t: 'Yesterday' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Mirage', sc: '13–8', kda: '21/12/3', rt: '1.32', t: '2 days ago' },
+                    { g: 'cs2', q: 'faceit', r: 'L', map: 'Ancient', sc: '11–13', kda: '18/17/5', rt: '0.95', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 'paluh', name: 'Paluh', clan: 'W7M', region: 'SA', tagline: 'Brazilian beast.', online: true, verified: null,
+                cs2: null,
+                r6: { rank: 'Champion', rating: 5720, kd: '1.61', wr: '68', hs: '52', kills: '26,890', matches: 3100, globalRank: 5 },
+                radar: { r6: [.90, .88, .84, .82, .89, .80] },
+                tags: { r6: ['Hard Breacher', 'Support Fragger', 'Utility Master', 'Clutch Factor'] },
+                lethality: { score: 85.8, tier: 'Veteran', breakdown: [{ l: 'R6 K/D', w: .35, v: 90, s: 31.5 }, { l: 'R6 Win Rate', w: .25, v: 85, s: 21.2 }, { l: 'R6 HS%', w: .20, v: 65, s: 13.0 }, { l: 'R6 Rating', w: .20, v: 91, s: 18.2 }] },
+                matches: [
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Border', sc: '4–0', kda: '10/2/5', rt: '1.82', t: '3h ago' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Kafe', sc: '4–3', kda: '9/7/3', rt: '1.12', t: '8h ago' },
+                    { g: 'r6', q: 'ranked', r: 'L', map: 'Oregon', sc: '3–4', kda: '8/8/2', rt: '0.92', t: 'Yesterday' },
+                    { g: 'r6', q: 'hub', r: 'W', map: 'Clubhouse', sc: '4–1', kda: '11/3/4', rt: '1.72', t: '2 days ago' },
+                    { g: 'r6', q: 'ranked', r: 'W', map: 'Chalet', sc: '4–2', kda: '9/5/3', rt: '1.35', t: '3 days ago' }
+                ]
+            },
+            {
+                id: 'donk', name: 'donk', clan: 'SPRT', region: 'EU East', tagline: 'The prodigy.', online: false, verified: 'pro',
+                cs2: { rank: 'Global Elite', elo: 3248, kd: '1.51', wr: '67', hs: '55', kills: '18,940', matches: 2050 },
+                r6: null, radar: { cs2: [.91, .93, .84, .78, .92, .60] },
+                tags: { cs2: ['Entry Beast', 'Young Prodigy', 'Rifle Demon', 'Aggressive'] },
+                lethality: { score: 86.5, tier: 'Lethal', breakdown: [{ l: 'CS2 K/D', w: .40, v: 87, s: 34.8 }, { l: 'CS2 Win Rate', w: .25, v: 84, s: 21.0 }, { l: 'FaceIt ELO', w: .20, v: 90, s: 18.0 }, { l: 'CS2 HS%', w: .15, v: 69, s: 10.3 }] },
+                matches: [
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Mirage', sc: '13–4', kda: '24/6/3', rt: '1.75', t: '4h ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Inferno', sc: '13–11', kda: '23/18/5', rt: '1.11', t: 'Yesterday' },
+                    { g: 'cs2', q: 'faceit', r: 'W', map: 'Dust II', sc: '13–7', kda: '22/10/4', rt: '1.42', t: '2 days ago' },
+                    { g: 'cs2', q: 'faceit', r: 'L', map: 'Nuke', sc: '9–13', kda: '14/15/3', rt: '0.88', t: '2 days ago' },
+                    { g: 'cs2', q: 'mm', r: 'W', map: 'Ancient', sc: '13–6', kda: '20/9/5', rt: '1.48', t: '3 days ago' }
+                ]
+            }
+        ];
+
+        // ===== ROUTER =====
+        const Router = {
+            routes: {},
+            register(path, fn) { this.routes[path] = fn },
+            navigate(hash) { window.location.hash = hash },
+            resolve() {
+                const h = window.location.hash.slice(1) || 'home';
+                const [route, ...params] = h.split('/');
+                const fn = this.routes[route];
+                const el = document.getElementById('pageContent');
+                if (fn) { el.innerHTML = fn(params.join('/')); el.style.animation = 'none'; el.offsetHeight; el.style.animation = 'pageIn .4s ease'; afterRender(route, params.join('/')); }
+                else { el.innerHTML = '<div class="section" style="text-align:center;padding-top:120px"><div style="font-family:var(--font-d);font-size:80px;color:var(--red-dim)">404</div><div style="font-family:var(--font-m);font-size:12px;color:var(--text-dim);margin-top:12px">TARGET NOT FOUND</div></div>'; }
+                updateNav(route);
+            },
+            init() { window.addEventListener('hashchange', () => this.resolve()); this.resolve(); }
+        };
+
+        // ===== NAV =====
+        const NAV_ITEMS = [{ id: 'home', label: 'Home' }, { id: 'players', label: 'Players' }, { id: 'leaderboards', label: 'Ranks' }, { id: 'live', label: 'Live' }, { id: 'h2h', label: 'H2H' }, { id: 'apply', label: 'Apply' }, { id: 'faq', label: 'FAQ' }];
+        function updateNav(active) {
+            document.getElementById('navLinks').innerHTML = NAV_ITEMS.map(n => `<div class="nav-link${active === n.id ? ' active' : ''}" onclick="Router.navigate('#${n.id}')">${n.label}</div>`).join('');
+        }
+
+        // ===== SEARCH =====
+        const si = document.getElementById('searchInput'), sd = document.getElementById('searchDropdown');
+        si.addEventListener('input', () => {
+            const q = si.value.toLowerCase().trim(); if (!q) { sd.classList.remove('active'); return; }
+            const res = PLAYERS.filter(p => p.name.toLowerCase().includes(q) || p.clan.toLowerCase().includes(q));
+            if (!res.length) { sd.classList.remove('active'); return; }
+            sd.innerHTML = res.map(p => `<div class="sr-item" onclick="Router.navigate('#profile/${p.id}');sd.classList.remove('active');si.value=''"><div class="sr-avatar">${p.name[0]}</div><div><div class="sr-name">${p.name}${p.verified ? '<span class="pc-verified">✓</span>' : ''}</div><div class="sr-meta">[${p.clan}] · ${p.region}</div></div></div>`).join('');
+            sd.classList.add('active');
+        });
+        document.addEventListener('click', e => { if (!e.target.closest('.nav-search')) sd.classList.remove('active'); });
+        document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); si.focus(); } if (e.key === 'Escape') sd.classList.remove('active'); });
+
+        // ===== HELPERS =====
+        function getTierClass(score) { if (score >= 95) return 'Apex Predator'; if (score >= 86) return 'Lethal'; if (score >= 76) return 'Veteran'; if (score >= 61) return 'Specialist'; if (score >= 41) return 'Operative'; return 'Recruit'; }
+        function tierIdx(tier) { return ['Recruit', 'Operative', 'Specialist', 'Veteran', 'Lethal', 'Apex Predator'].indexOf(tier); }
+
+        // ===== RENDER HOME =====
+        function renderHome() {
+            const featured = PLAYERS[0];
+            const onlineCount = PLAYERS.filter(p => p.online).length;
+            return `
+  <div class="hero"><div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-content">
+    <div class="hero-tag">// Tactical Intelligence Platform</div>
+    <div class="hero-title">VAN<span>GUARD</span></div>
+    <div class="hero-sub">Elite player analytics · CS2 & Rainbow Six Siege</div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-val">${PLAYERS.length}</div><div class="hero-stat-lbl">Operators</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">${onlineCount}</div><div class="hero-stat-lbl">Online Now</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">2</div><div class="hero-stat-lbl">Active Games</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">∞</div><div class="hero-stat-lbl">Data Points</div></div>
+    </div>
+    <div class="hero-cta">
+      <div class="btn btn-fill" onclick="Router.navigate('#players')">Browse Players</div>
+      <div class="btn" onclick="Router.navigate('#leaderboards')">Leaderboards</div>
+    </div>
+  </div></div>
+  <div class="section reveal">
+    <div class="section-head"><div><div class="section-title">Featured <span>Operator</span></div><div class="section-sub">Ny9e.VLP · Champion #32</div></div>
+      <div class="btn" onclick="Router.navigate('#profile/${featured.id}')">View Profile →</div></div>
+    <div class="ovstrip">
+      <div class="ovc"><div class="ovl">R6 Peak Rank</div><div class="ovv">CHAMP</div><div class="ovs">#32 Global · EU</div></div>
+      <div class="ovc"><div class="ovl">CS2 MM Rank</div><div class="ovv">GE</div><div class="ovs">Global Elite</div></div>
+      <div class="ovc"><div class="ovl">FaceIt Peak ELO</div><div class="ovv">2847</div><div class="ovs">Level 10</div></div>
+      <div class="ovc"><div class="ovl">Lethality Index</div><div class="ovv">${Math.round(featured.lethality.score)}</div><div class="ovs">${featured.lethality.tier} Tier</div></div>
+    </div>
+  </div>
+  <div class="section reveal">
+    <div class="section-head"><div><div class="section-title">Live <span>Activity</span></div><div class="section-sub">Real-time player feed</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px" id="liveFeedHome"></div>
+  </div>`;
+        }
+
+        // ===== RENDER PLAYERS =====
+        function renderPlayers() {
+            return `<div class="section">
+    <div class="section-head"><div><div class="section-title">Player <span>Directory</span></div><div class="section-sub">${PLAYERS.length} registered operators</div></div></div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" onclick="filterPlayers('all',this)">All</button>
+      <button class="filter-btn" onclick="filterPlayers('cs2',this)">CS2</button>
+      <button class="filter-btn" onclick="filterPlayers('r6',this)">R6 Siege</button>
+      <button class="filter-btn" onclick="filterPlayers('online',this)">Online</button>
+      <button class="filter-btn" onclick="filterPlayers('eu',this)">EU</button>
+      <button class="filter-btn" onclick="filterPlayers('na',this)">NA</button>
+    </div>
+    <div class="players-grid" id="playersGrid">${renderPlayerCards(PLAYERS)}</div>
+  </div>`;
+        }
+        function renderPlayerCards(list) {
+            return list.map(p => {
+                const game = p.cs2 ? 'CS2' : 'R6'; const kd = p.cs2 ? p.cs2.kd : p.r6.kd; const wr = p.cs2 ? p.cs2.wr : p.r6.wr;
+                return `<div class="player-card" onclick="Router.navigate('#profile/${p.id}')" data-games="${p.cs2 ? 'cs2' : ''} ${p.r6 ? 'r6' : ''}" data-region="${p.region.toLowerCase()}" data-online="${p.online}">
+      ${p.online ? '<div class="pc-online"></div>' : ''}
+      <div class="pc-top"><div class="pc-avatar">${p.name[0]}</div><div><div class="pc-name">${p.name}${p.verified ? '<span class="pc-verified"> ✓</span>' : ''}</div><div class="pc-clan">[${p.clan}] · ${p.region}</div></div></div>
+      <div class="pc-stats"><div><div class="pc-stat-lbl">${game}</div><div class="pc-stat-val">${kd}</div></div><div><div class="pc-stat-lbl">Win %</div><div class="pc-stat-val">${wr}%</div></div><div><div class="pc-stat-lbl">Index</div><div class="pc-stat-val">${Math.round(p.lethality.score)}</div></div></div>
+      <div class="pc-tags">${p.tags[p.cs2 ? 'cs2' : 'r6'].slice(0, 3).map(t => `<span class="pc-tag">${t}</span>`).join('')}</div>
+    </div>`;
+            }).join('');
+        }
+        function filterPlayers(f, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+            let filtered = PLAYERS;
+            if (f === 'cs2') filtered = PLAYERS.filter(p => p.cs2);
+            else if (f === 'r6') filtered = PLAYERS.filter(p => p.r6);
+            else if (f === 'online') filtered = PLAYERS.filter(p => p.online);
+            else if (f === 'eu') filtered = PLAYERS.filter(p => p.region.toLowerCase().includes('eu'));
+            else if (f === 'na') filtered = PLAYERS.filter(p => p.region.toLowerCase().includes('na'));
+            document.getElementById('playersGrid').innerHTML = renderPlayerCards(filtered);
+        }
+
+        // ===== RENDER LEADERBOARDS =====
+        function renderLeaderboards() {
+            return `<div class="section">
+    <div class="section-head"><div><div class="section-title">Leader<span>boards</span></div><div class="section-sub">Global rankings</div></div></div>
+    <div class="lb-tabs"><button class="lb-tab active" onclick="switchLb('lethality',this)">Lethality Index</button><button class="lb-tab" onclick="switchLb('cs2',this)">CS2</button><button class="lb-tab" onclick="switchLb('r6',this)">R6 Siege</button></div>
+    <div id="lbContent">${renderLbTable('lethality')}</div>
+  </div>`;
+        }
+        function renderLbTable(type) {
+            let sorted, cols;
+            if (type === 'lethality') { sorted = [...PLAYERS].sort((a, b) => b.lethality.score - a.lethality.score); cols = [{ l: 'Score', k: p => p.lethality.score.toFixed(1), hot: true }, { l: 'Tier', k: p => p.lethality.tier }, { l: 'Games', k: p => [p.cs2 ? 'CS2' : '', p.r6 ? 'R6' : ''].filter(Boolean).join(' / ') }, { l: 'Region', k: p => p.region }]; }
+            else if (type === 'cs2') { sorted = PLAYERS.filter(p => p.cs2).sort((a, b) => parseFloat(b.cs2.kd) - parseFloat(a.cs2.kd)); cols = [{ l: 'K/D', k: p => p.cs2.kd, hot: true }, { l: 'Win %', k: p => p.cs2.wr + '%' }, { l: 'HS %', k: p => p.cs2.hs + '%' }, { l: 'ELO', k: p => p.cs2.elo }]; }
+            else { sorted = PLAYERS.filter(p => p.r6).sort((a, b) => b.r6.rating - a.r6.rating); cols = [{ l: 'Rating', k: p => p.r6.rating, hot: true }, { l: 'K/D', k: p => p.r6.kd }, { l: 'Win %', k: p => p.r6.wr + '%' }, { l: 'Rank', k: p => '#' + (p.r6.globalRank || '—') }]; }
+            return `<table class="lb-table"><thead><tr><th>#</th><th>Player</th>${cols.map(c => `<th>${c.l}</th>`).join('')}</tr></thead><tbody>${sorted.map((p, i) => `<tr style="cursor:pointer" onclick="Router.navigate('#profile/${p.id}')"><td><span class="lb-rank${i < 3 ? ' top' + (i + 1) : ''}">${i + 1}</span></td><td><div class="lb-player"><div class="lb-avatar">${p.name[0]}</div><div><span class="lb-name">${p.name}</span><span class="lb-clan-tag">[${p.clan}]</span></div></div></td>${cols.map(c => `<td class="lb-val${c.hot ? ' hot' : ''}">${c.k(p)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+        }
+        function switchLb(type, btn) { document.querySelectorAll('.lb-tab').forEach(b => b.classList.remove('active')); btn.classList.add('active'); document.getElementById('lbContent').innerHTML = renderLbTable(type); }
+
+        // ===== RENDER PROFILE =====
+        function renderProfile(id) {
+            const p = PLAYERS.find(x => x.id === id); if (!p) return '<div class="section" style="text-align:center;padding:100px 0"><div style="font-family:var(--font-d);font-size:60px;color:var(--red-dim)">GHOST</div><div style="font-family:var(--font-m);font-size:11px;color:var(--text-dim)">Player not found</div></div>';
+            const games = []; if (p.cs2) games.push('cs2'); if (p.r6) games.push('r6');
+            const primary = games[0];
+            let html = `<div class="profile-header"><div class="profile-bg"></div><div class="profile-grid-bg"></div><div class="profile-content"><div><div class="profile-name">${p.name}<em>.${p.clan}</em></div><div class="profile-sub">// ${p.tagline} · ${p.region}</div></div><div class="profile-status">${p.online ? 'ONLINE' : 'OFFLINE'}</div></div><div class="divider"></div></div>`;
+            // Overview strip
+            html += `<div class="section"><div class="ovstrip">`;
+            if (p.r6) html += `<div class="ovc"><div class="ovl">R6 Rank</div><div class="ovv">${p.r6.rank.toUpperCase().replace('CHAMPION', 'CHAMP')}</div><div class="ovs">${p.r6.globalRank ? '#' + p.r6.globalRank + ' Global' : '—'}</div></div>`;
+            if (p.cs2) html += `<div class="ovc"><div class="ovl">CS2 Rank</div><div class="ovv">${p.cs2.rank === 'Global Elite' ? 'GE' : p.cs2.rank}</div><div class="ovs">${p.cs2.rank}</div></div>`;
+            if (p.cs2) html += `<div class="ovc"><div class="ovl">FaceIt ELO</div><div class="ovv">${p.cs2.elo}</div><div class="ovs">Level 10</div></div>`;
+            html += `<div class="ovc"><div class="ovl">Lethality</div><div class="ovv">${Math.round(p.lethality.score)}</div><div class="ovs">${p.lethality.tier}</div></div></div>`;
+            // Game sections
+            games.forEach(g => {
+                const d = g === 'cs2' ? p.cs2 : p.r6; const gn = g === 'cs2' ? 'Counter-Strike 2' : 'Rainbow Six Siege';
+                const radarLabels = g === 'cs2' ? ['AIM', 'ENTRY', 'WIN%', 'CLUTCH', 'FRAG', 'UTIL'] : ['AIM', 'AGGRO', 'WIN%', 'CLUTCH', 'FRAG', 'IQ'];
+                html += `<div class="gdiv" style="margin:30px auto"><div class="gdivl"></div><div class="gdivn">${gn}</div><div class="gdivl r"></div></div>`;
+                html += `<div class="gsec"><div class="gshead"><div><div class="gsname">${gn}</div><div class="gstag">${g === 'cs2' ? `FaceIt Level 10 · ${d.rank} · ${p.region}` : `Season ${new Date().getFullYear()} · ${p.region}`}</div></div><div class="gsrank"><div class="gsrmain">${g === 'cs2' ? d.elo + ' ELO' : d.rank + (d.globalRank ? ' #' + d.globalRank : '')}</div><div class="gsrsub">${g === 'cs2' ? 'FaceIt Level 10' : 'Current Season Rank'}</div></div></div>`;
+                html += `<div class="gsbody"><div class="gsleft"><div class="srow"><div><div class="sbl">K/D Ratio</div><div class="sbv hot">${d.kd}</div><div class="sbc">${parseFloat(d.kd) > 1.5 ? 'Elite tier' : 'Above average'}</div></div><div><div class="sbl">Win Rate</div><div class="sbv hot">${d.wr}%</div><div class="sbc">${parseInt(d.wr) > 65 ? 'Top 10%' : 'Top 25%'}</div></div><div><div class="sbl">${g === 'cs2' ? 'HS %' : 'Headshot %'}</div><div class="sbv${parseInt(d.hs) > 55 ? ' hot' : ''}">${d.hs}%</div><div class="sbc">${parseInt(d.hs) > 55 ? 'Top 5%' : 'Above avg'}</div></div></div>`;
+                html += `<div class="srow"><div><div class="sbl">Kills</div><div class="sbv">${d.kills}</div><div class="sbc">Total kills</div></div><div><div class="sbl">Matches</div><div class="sbv">${d.matches}</div><div class="sbc">Games played</div></div><div><div class="sbl">Region</div><div class="sbv">${p.region.split(' ')[0]}</div><div class="sbc">${p.region}</div></div></div>`;
+                html += `<div class="pslbl">Playstyle Identity</div><div class="psrow">${(p.tags[g] || []).map(t => `<div class="pstag">${t}</div>`).join('')}</div>`;
+                html += `</div><div class="gsright"><div class="rlbl">Player Radar</div><canvas id="${g}Radar" width="190" height="190"></canvas></div></div></div>`;
+            });
+            // Lethality
+            const li = p.lethality;
+            html += `<div class="gdiv" style="margin:30px auto"><div class="gdivl"></div><div class="gdivn">Lethality Index</div><div class="gdivl r"></div></div>`;
+            html += `<div class="lisec"><div class="lihead"><div><div class="lititle">Lethality Index</div><div class="lisub">Cross-Game Scoring · v1.0</div></div><div class="licls">CLASSIFIED</div></div>`;
+            html += `<div class="libody"><div class="scwrap"><div class="sccircle"><svg viewBox="0 0 140 140"><circle class="scbg" cx="70" cy="70" r="57"/><circle class="scfill" id="scoreArc" cx="70" cy="70" r="57"/></svg><div class="scinner"><div class="scnum" id="scoreNum">0</div><div class="scmax">/ 100</div></div></div><div class="sctier" id="scoreTier">CALCULATING...</div></div>`;
+            html += `<div class="libreak">${li.breakdown.map(b => `<div class="lirow"><div class="lillbl">${b.l} (×${b.w.toFixed(2)})</div><div class="litrack"><div class="lifill" data-w="${b.v}"></div></div><div class="liwt">×${b.w.toFixed(2)}</div><div class="lisc">+${b.s.toFixed(1)}</div></div>`).join('')}</div></div>`;
+            html += `<div class="tierladder">${['Recruit', 'Operative', 'Specialist', 'Veteran', 'Lethal', 'Apex Predator'].map((t, i) => `<div class="tiers${t === li.tier ? ' on' : ''}"><div class="tsn">${t}</div><div class="tsr">${['0–40', '41–60', '61–75', '76–85', '86–94', '95–100'][i]}</div></div>`).join('')}</div></div>`;
+            // Match History
+            if (p.matches && p.matches.length) {
+                const games = [...new Set(p.matches.map(m => m.g))];
+                const queues = [...new Set(p.matches.map(m => m.q))];
+                const hasMultipleGames = games.length > 1;
+                const queueLabels = { faceit: 'FaceIt', mm: 'Matchmaking', hub: 'Community Hub', ranked: 'Ranked' };
+
+                html += `<div class="gdiv" style="margin:30px auto"><div class="gdivl"></div><div class="gdivn">Match History</div><div class="gdivl r"></div></div>`;
+                html += `<div id="mhSection">`;
+
+                // Filters
+                html += `<div class="mh-filters">`;
+
+                // Game filter (only if player plays multiple games)
+                if (hasMultipleGames) {
+                    html += `<div class="mh-filter-group">`;
+                    html += `<div class="mh-filter-label">Game</div>`;
+                    html += `<button class="mh-btn active" data-mh-game="all" onclick="filterMatches('${p.id}','all',null)">All</button>`;
+                    games.forEach(g => {
+                        const label = g === 'cs2' ? 'CS2' : 'R6 Siege';
+                        html += `<button class="mh-btn" data-mh-game="${g}" onclick="filterMatches('${p.id}','${g}',null)">${label}</button>`;
+                    });
+                    html += `</div>`;
+                }
+
+                // Queue type filter
+                html += `<div class="mh-filter-group" id="mhQueueFilter">`;
+                html += `<div class="mh-filter-label">Queue</div>`;
+                html += `<button class="mh-btn active" data-mh-queue="all" onclick="filterMatches('${p.id}',null,'all')">All</button>`;
+                queues.forEach(q => {
+                    html += `<button class="mh-btn" data-mh-queue="${q}" onclick="filterMatches('${p.id}',null,'${q}')">${queueLabels[q]}</button>`;
+                });
+                html += `</div>`;
+
+                html += `<div class="mh-count" id="mhCount">${p.matches.length} matches</div>`;
+                html += `</div>`;
+
+                // Match list
+                html += `<div id="mhList" style="display:flex;flex-direction:column;gap:6px">`;
+                p.matches.forEach(m => {
+                    html += `<div class="match" data-game="${m.g}" data-queue="${m.q}">`;
+                    html += `<div class="match-result ${m.r === 'W' ? 'w' : 'l'}">${m.r}</div>`;
+                    html += `<div class="match-queue ${m.q}">${queueLabels[m.q]}</div>`;
+                    html += `<div class="match-map">${m.map} <span class="match-game-icon">${m.g === 'cs2' ? 'CS2' : 'R6'}</span></div>`;
+                    html += `<div class="match-score">${m.sc}</div>`;
+                    html += `<div class="match-kda">${m.kda}</div>`;
+                    html += `<div class="match-rating">${m.rt}</div>`;
+                    html += `<div class="match-time">${m.t}</div>`;
+                    html += `</div>`;
+                });
+                html += `</div>`;
+                html += `</div>`;
+            }
+            html += `</div>`;
+            return html;
+        }
+
+        // ===== MATCH HISTORY FILTER =====
+        let mhActiveGame = 'all';
+        let mhActiveQueue = 'all';
+
+        function filterMatches(playerId, game, queue) {
+            const p = PLAYERS.find(x => x.id === playerId);
+            if (!p || !p.matches) return;
+
+            if (game !== null) mhActiveGame = game;
+            if (queue !== null) mhActiveQueue = queue;
+
+            const queueLabels = { faceit: 'FaceIt', mm: 'Matchmaking', hub: 'Community Hub', ranked: 'Ranked' };
+
+            // Update game filter button states
+            document.querySelectorAll('[data-mh-game]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mhGame === mhActiveGame);
+            });
+
+            // When game filter changes, rebuild queue filter to show only relevant queues
+            if (game !== null) {
+                mhActiveQueue = 'all';
+                const filteredByGame = mhActiveGame === 'all' ? p.matches : p.matches.filter(m => m.g === mhActiveGame);
+                const availableQueues = [...new Set(filteredByGame.map(m => m.q))];
+
+                const qFilterEl = document.getElementById('mhQueueFilter');
+                if (qFilterEl) {
+                    let qHtml = `<div class="mh-filter-label">Queue</div>`;
+                    qHtml += `<button class="mh-btn active" data-mh-queue="all" onclick="filterMatches('${playerId}',null,'all')">All</button>`;
+                    availableQueues.forEach(q => {
+                        qHtml += `<button class="mh-btn" data-mh-queue="${q}" onclick="filterMatches('${playerId}',null,'${q}')">${queueLabels[q]}</button>`;
+                    });
+                    qFilterEl.innerHTML = qHtml;
+                }
+            }
+
+            // Update queue filter button states
+            document.querySelectorAll('[data-mh-queue]').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mhQueue === mhActiveQueue);
+            });
+
+            // Filter and show/hide matches
+            const matches = document.querySelectorAll('#mhList .match');
+            let visibleCount = 0;
+            matches.forEach(el => {
+                const g = el.dataset.game;
+                const q = el.dataset.queue;
+                const gameMatch = mhActiveGame === 'all' || g === mhActiveGame;
+                const queueMatch = mhActiveQueue === 'all' || q === mhActiveQueue;
+                const show = gameMatch && queueMatch;
+                el.style.display = show ? '' : 'none';
+                if (show) visibleCount++;
+            });
+
+            // Update count
+            const countEl = document.getElementById('mhCount');
+            if (countEl) countEl.textContent = visibleCount + (visibleCount === 1 ? ' match' : ' matches');
+
+            // Show empty state if no matches
+            const existingEmpty = document.querySelector('.mh-empty');
+            if (existingEmpty) existingEmpty.remove();
+            if (visibleCount === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'mh-empty';
+                emptyDiv.textContent = 'No matches found for this filter';
+                document.getElementById('mhList').appendChild(emptyDiv);
+            }
+        }
+
+        // ===== RENDER HEAD-TO-HEAD =====
+        function renderH2H() {
+            return `<div class="section">
+    <div class="section-head"><div><div class="section-title">Head-to-<span>Head</span></div><div class="section-sub">Compare two operators</div></div></div>
+    <div class="h2h-selector" id="h2hSelector">
+      <div class="h2h-pick selected" id="h2hPick1" onclick="openH2HPicker(1)"><div style="font-family:var(--font-m);font-size:9px;color:var(--text-dim)">OPERATOR 1</div><div class="h2h-name">${PLAYERS[0].name}</div><div class="h2h-clan">[${PLAYERS[0].clan}]</div></div>
+      <div class="h2h-vs">VS</div>
+      <div class="h2h-pick" id="h2hPick2" onclick="openH2HPicker(2)"><div style="font-family:var(--font-m);font-size:9px;color:var(--text-dim)">OPERATOR 2</div><div class="h2h-name">${PLAYERS[1].name}</div><div class="h2h-clan">[${PLAYERS[1].clan}]</div></div>
+    </div>
+    <div id="h2hPickerOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2000;display:none;align-items:center;justify-content:center">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;max-width:400px;width:90%">
+        <div style="font-family:var(--font-d);font-size:20px;letter-spacing:3px;color:var(--white);margin-bottom:16px">Select Player</div>
+        <div id="h2hPickerList" style="display:flex;flex-direction:column;gap:6px"></div>
+        <div class="btn" style="margin-top:16px;text-align:center" onclick="closeH2HPicker()">Cancel</div>
+      </div>
+    </div>
+    <div id="h2hResult">${renderH2HBars(PLAYERS[0], PLAYERS[1])}</div>
+  </div>`;
+        }
+        let h2hSlot = 1, h2hP1 = PLAYERS[0], h2hP2 = PLAYERS[1];
+        function openH2HPicker(slot) {
+            h2hSlot = slot; const ov = document.getElementById('h2hPickerOverlay'); ov.style.display = 'flex';
+            document.getElementById('h2hPickerList').innerHTML = PLAYERS.map(p => `<div class="sr-item" onclick="selectH2H('${p.id}')"><div class="sr-avatar">${p.name[0]}</div><div><div class="sr-name">${p.name}</div><div class="sr-meta">[${p.clan}] · ${p.region}</div></div></div>`).join('');
+        }
+        function closeH2HPicker() { document.getElementById('h2hPickerOverlay').style.display = 'none'; }
+        function selectH2H(id) {
+            const p = PLAYERS.find(x => x.id === id); if (!p) return;
+            if (h2hSlot === 1) { h2hP1 = p; document.getElementById('h2hPick1').querySelector('.h2h-name').textContent = p.name; document.getElementById('h2hPick1').querySelector('.h2h-clan').textContent = '[' + p.clan + ']'; }
+            else { h2hP2 = p; document.getElementById('h2hPick2').querySelector('.h2h-name').textContent = p.name; document.getElementById('h2hPick2').querySelector('.h2h-clan').textContent = '[' + p.clan + ']'; }
+            closeH2HPicker(); document.getElementById('h2hResult').innerHTML = renderH2HBars(h2hP1, h2hP2);
+            setTimeout(() => { document.querySelectorAll('.h2h-fill').forEach(b => { b.style.width = b.dataset.w + '%'; }); }, 100);
+        }
+        function renderH2HBars(p1, p2) {
+            const stats = [{ l: 'Lethality Score', v1: p1.lethality.score, v2: p2.lethality.score, max: 100 },
+            { l: 'K/D Ratio', v1: parseFloat(p1.cs2 ? p1.cs2.kd : (p1.r6 ? p1.r6.kd : '0')), v2: parseFloat(p2.cs2 ? p2.cs2.kd : (p2.r6 ? p2.r6.kd : '0')), max: 3 },
+            { l: 'Win Rate %', v1: parseInt(p1.cs2 ? p1.cs2.wr : (p1.r6 ? p1.r6.wr : '0')), v2: parseInt(p2.cs2 ? p2.cs2.wr : (p2.r6 ? p2.r6.wr : '0')), max: 100 },
+            { l: 'Headshot %', v1: parseInt(p1.cs2 ? p1.cs2.hs : (p1.r6 ? p1.r6.hs : '0')), v2: parseInt(p2.cs2 ? p2.cs2.hs : (p2.r6 ? p2.r6.hs : '0')), max: 100 }];
+            return `<div class="h2h-bars">${stats.map(s => {
+                const pct1 = Math.min((s.v1 / s.max) * 100, 100), pct2 = Math.min((s.v2 / s.max) * 100, 100);
+                const fmt = s.max === 3 ? v => v.toFixed(2) : v => Math.round(v);
+                return `<div><div class="h2h-lbl">${s.l}</div><div class="h2h-row"><div class="h2h-val left">${fmt(s.v1)}</div><div class="h2h-bar left"><div class="h2h-fill left" data-w="${pct1}"></div></div><div class="h2h-mid">${s.v1 > s.v2 ? '◄' : '='}</div><div class="h2h-mid">${s.v2 > s.v1 ? '►' : '='}</div><div class="h2h-bar"><div class="h2h-fill right" data-w="${pct2}"></div></div><div class="h2h-val right">${fmt(s.v2)}</div></div></div>`;
+            }).join('')}</div>`;
+        }
+
+        // ===== RENDER LIVE FEED =====
+        const FEED_EVENTS = [
+            { icon: ICN.crosshair, text: '<strong>s1mple</strong> got an ACE on Dust II', time: 'Just now' },
+            { icon: ICN.trophy, text: '<strong>Beaulo</strong> reached Champion #1 in R6 Siege', time: '2m ago' },
+            { icon: ICN.swords, text: '<strong>Ny9e.VLP</strong> won 5 matches in a row', time: '8m ago' },
+            { icon: ICN.flame, text: '<strong>ZywOo</strong> hit a 1.82 rating on Inferno', time: '15m ago' },
+            { icon: ICN.skull, text: '<strong>Shaiiko</strong> dropped 18 kills on Oregon', time: '22m ago' },
+            { icon: ICN.chart, text: '<strong>donk</strong> climbed to 3,248 ELO on FaceIt', time: '31m ago' },
+            { icon: ICN.gamepad, text: '<strong>NiKo</strong> queued for competitive matchmaking', time: '38m ago' },
+            { icon: ICN.shield, text: '<strong>Paluh</strong> clutched a 1v4 on Border', time: '45m ago' },
+            { icon: ICN.bolt, text: '<strong>Ny9e.VLP</strong> is now online', time: '52m ago' },
+            { icon: ICN.rifle, text: '<strong>s1mple</strong> hit 77% HS rate this session', time: '1h ago' },
+            { icon: ICN.medal, text: '<strong>Beaulo</strong> earned Ace Medal on Clubhouse', time: '1h ago' },
+            { icon: ICN.burst, text: '<strong>ZywOo</strong> won FaceIt match 13–4', time: '2h ago' },
+        ];
+        function renderLive() {
+            return `<div class="section">
+    <div class="section-head"><div><div class="section-title">Live <span>Feed</span></div><div class="section-sub">Real-time activity stream</div></div></div>
+    <div style="display:flex;flex-direction:column;gap:8px" id="liveFeed">
+      ${FEED_EVENTS.map((e, i) => `<div class="feed-item${i === 0 ? ' feed-new' : ''}" style="animation-delay:${i * 0.08}s"><div class="feed-icon">${e.icon}</div><div class="feed-text">${e.text}</div><div class="feed-time">${e.time}</div></div>`).join('')}
+    </div>
+  </div>`;
+        }
+
+        // ===== RADAR CHART =====
+        function drawRadar(id, labels, values, color) {
+            const c = document.getElementById(id); if (!c) return;
+            const ctx = c.getContext('2d'), cx = c.width / 2, cy = c.height / 2, r = 68, n = labels.length;
+            const a = i => (Math.PI * 2 / n) * i - Math.PI / 2;
+            const pt = (i, rad) => ({ x: cx + rad * Math.cos(a(i)), y: cy + rad * Math.sin(a(i)) });
+            ctx.clearRect(0, 0, c.width, c.height);
+            [.25, .5, .75, 1].forEach(s => { ctx.beginPath(); for (let i = 0; i < n; i++) { const p = pt(i, r * s); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); } ctx.closePath(); ctx.strokeStyle = 'rgba(192,57,43,0.13)'; ctx.lineWidth = 1; ctx.stroke(); });
+            for (let i = 0; i < n; i++) { const p = pt(i, r); ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p.x, p.y); ctx.strokeStyle = 'rgba(192,57,43,0.18)'; ctx.lineWidth = 1; ctx.stroke(); }
+            ctx.beginPath(); values.forEach((v, i) => { const p = pt(i, r * v); i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y); }); ctx.closePath(); ctx.fillStyle = color.replace('1)', '0.13)'); ctx.fill(); ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+            values.forEach((v, i) => { const p = pt(i, r * v); ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fillStyle = color; ctx.fill(); });
+            ctx.font = '600 8px JetBrains Mono,monospace'; ctx.fillStyle = 'rgba(120,120,120,0.9)'; ctx.textAlign = 'center';
+            labels.forEach((l, i) => { const p = pt(i, r + 14); ctx.fillText(l, p.x, p.y + 3); });
+        }
+
+        // ===== SCORE ANIMATION =====
+        function animateScore(score, tier) {
+            const numEl = document.getElementById('scoreNum'), tierEl = document.getElementById('scoreTier'), arc = document.getElementById('scoreArc');
+            if (!numEl || !arc) return;
+            const circ = 2 * Math.PI * 57; let start = null;
+            function tick(ts) {
+                if (!start) start = ts; const p = Math.min((ts - start) / 2000, 1), e = 1 - Math.pow(1 - p, 3);
+                numEl.textContent = Math.round(e * score); arc.style.strokeDashoffset = circ - (circ * e * score / 100);
+                if (p < 1) requestAnimationFrame(tick); else { numEl.textContent = Math.round(score); tierEl.textContent = tier; }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        // ===== SCROLL ANIMATIONS =====
+        function initReveal() {
+            const obs = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: .1 });
+            document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        }
+
+        // ===== MOUSE TRAIL =====
+        document.addEventListener('mousemove', e => { const d = document.createElement('div'); d.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:3px;height:3px;background:rgba(192,57,43,0.4);border-radius:50%;pointer-events:none;z-index:9997;transform:translate(-50%,-50%);transition:opacity .5s`; document.body.appendChild(d); setTimeout(() => d.style.opacity = '0', 50); setTimeout(() => d.remove(), 600); });
+
+        // ===== AFTER RENDER =====
+        function afterRender(route, param) {
+            initReveal();
+            if (route === 'profile') {
+                const p = PLAYERS.find(x => x.id === param); if (!p) return;
+                setTimeout(() => {
+                    if (p.cs2 && p.radar.cs2) drawRadar('cs2Radar', ['AIM', 'ENTRY', 'WIN%', 'CLUTCH', 'FRAG', 'UTIL'], p.radar.cs2, 'rgba(231,76,60,1)');
+                    if (p.r6 && p.radar.r6) drawRadar('r6Radar', ['AIM', 'AGGRO', 'WIN%', 'CLUTCH', 'FRAG', 'IQ'], p.radar.r6, 'rgba(231,76,60,1)');
+                    document.querySelectorAll('.lifill').forEach(b => { b.style.width = b.dataset.w + '%'; });
+                    animateScore(p.lethality.score, p.lethality.tier);
+                }, 300);
+            }
+            if (route === 'h2h') { setTimeout(() => { document.querySelectorAll('.h2h-fill').forEach(b => { b.style.width = b.dataset.w + '%'; }); }, 200); }
+            if (route === 'home') {
+                const feed = document.getElementById('liveFeedHome');
+                if (feed) feed.innerHTML = FEED_EVENTS.slice(0, 5).map((e, i) => `<div class="feed-item" style="animation-delay:${i * 0.1}s"><div class="feed-icon">${e.icon}</div><div class="feed-text">${e.text}</div><div class="feed-time">${e.time}</div></div>`).join('');
+            }
+        }
+
+        // ===== REGISTER ROUTES =====
+        // ===== RENDER APPLY =====
+        function renderApply() {
+            return `
+    <div class="apply-hero"><div class="apply-hero-bg"></div><div class="apply-hero-content">
+      <div class="apply-title">APPLY FOR <span>PROFILE</span></div>
+      <div class="apply-sub">Request your operator profile on VANGUARD</div>
+    </div></div>
+    <div class="apply-form">
+      <div class="apply-req reveal">
+        <div class="apply-req-item"><div class="apply-req-icon">${ICN.target}</div><div class="apply-req-title">Competitive</div><div class="apply-req-desc">Active in ranked play</div></div>
+        <div class="apply-req-item"><div class="apply-req-icon">${ICN.bars}</div><div class="apply-req-title">Stats Ready</div><div class="apply-req-desc">Public profile stats</div></div>
+        <div class="apply-req-item"><div class="apply-req-icon">${ICN.link}</div><div class="apply-req-title">Verified</div><div class="apply-req-desc">Social media linked</div></div>
+      </div>
+      <div id="applyFormArea">
+      <div class="apply-step reveal" style="margin-top:32px">
+        <div class="apply-step-head"><div class="apply-step-num">1</div><div><div class="apply-step-title">Identity</div><div class="apply-step-desc">Your gamertag and team info</div></div></div>
+        <div class="apply-card">
+          <div class="apply-row"><div><label class="apply-label">Gamertag / Alias</label><input class="apply-input" id="applyName" placeholder="e.g. Ny9e"></div><div><label class="apply-label">Clan / Team Tag</label><input class="apply-input" id="applyClan" placeholder="e.g. VLP"></div></div>
+          <div class="apply-row"><div><label class="apply-label">Region</label><select class="apply-input select" id="applyRegion"><option value="">Select region...</option><option>EU West</option><option>EU East</option><option>NA East</option><option>NA West</option><option>South America</option><option>Asia Pacific</option><option>Middle East</option><option>Oceania</option></select></div><div><label class="apply-label">Email</label><input class="apply-input" id="applyEmail" type="email" placeholder="your@email.com"></div></div>
+        </div>
+      </div>
+      <div class="apply-step reveal">
+        <div class="apply-step-head"><div class="apply-step-num">2</div><div><div class="apply-step-title">Games</div><div class="apply-step-desc">Select your active titles</div></div></div>
+        <div class="apply-card">
+          <label class="apply-label" style="margin-bottom:10px">Active Games (select all that apply)</label>
+          <div class="apply-checks" id="applyGames">
+            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="cs2">${ICN.crosshair} Counter-Strike 2</label>
+            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="r6">${ICN.shield} Rainbow Six Siege</label>
+            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="val">${ICN.bolt} Valorant</label>
+            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="apex">${ICN.flame} Apex Legends</label>
+          </div>
+          <div class="apply-row"><div><label class="apply-label">Primary Game Rank</label><input class="apply-input" id="applyRank" placeholder="e.g. Global Elite, Champion, Radiant"></div><div><label class="apply-label">FaceIt / Tracker Link</label><input class="apply-input" id="applyTracker" placeholder="https://faceit.com/..."></div></div>
+        </div>
+      </div>
+      <div class="apply-step reveal">
+        <div class="apply-step-head"><div class="apply-step-num">3</div><div><div class="apply-step-title">Stats & Links</div><div class="apply-step-desc">Prove your skills</div></div></div>
+        <div class="apply-card">
+          <div class="apply-row"><div><label class="apply-label">K/D Ratio</label><input class="apply-input" id="applyKD" placeholder="e.g. 1.45"></div><div><label class="apply-label">Win Rate %</label><input class="apply-input" id="applyWR" placeholder="e.g. 62"></div></div>
+          <div class="apply-row"><div><label class="apply-label">Headshot %</label><input class="apply-input" id="applyHS" placeholder="e.g. 55"></div><div><label class="apply-label">Total Hours Played</label><input class="apply-input" id="applyHours" placeholder="e.g. 3,200"></div></div>
+          <div class="apply-row"><div><label class="apply-label">Twitter / X</label><input class="apply-input" id="applyTwitter" placeholder="@handle"></div><div><label class="apply-label">Twitch / YouTube</label><input class="apply-input" id="applyStream" placeholder="https://twitch.tv/..."></div></div>
+          <div class="apply-row full"><div><label class="apply-label">Why should you be on VANGUARD?</label><textarea class="apply-input" id="applyBio" placeholder="Tell us about your competitive background, achievements, and what makes you stand out..."></textarea></div></div>
+        </div>
+      </div>
+      <div class="apply-submit"><button class="btn btn-fill" onclick="submitApply()">Submit Application</button></div>
+      </div>
+    </div>`;
+        }
+
+        function submitApply() {
+            const name = document.getElementById('applyName').value.trim();
+            const clan = document.getElementById('applyClan').value.trim();
+            const region = document.getElementById('applyRegion').value;
+            const email = document.getElementById('applyEmail').value.trim();
+            if (!name || !email) {
+                const missing = !name ? 'Gamertag' : 'Email';
+                const el = document.getElementById(!name ? 'applyName' : 'applyEmail');
+                el.style.borderColor = 'var(--red-bright)';
+                el.focus();
+                setTimeout(() => el.style.borderColor = '', 2000);
+                return;
+            }
+            const id = 'VNG-' + Date.now().toString(36).toUpperCase().slice(-6);
+            document.getElementById('applyFormArea').innerHTML = `
+              <div class="apply-success">
+                <div class="apply-success-icon" style="color:var(--green)">${ICN.check}</div>
+                <div class="apply-success-title">APPLICATION RECEIVED</div>
+                <div class="apply-success-sub">Your profile request for <strong style="color:var(--red-bright)">${name}${clan ? '.' + clan : ''}</strong> is being reviewed by our intel team. You'll receive status updates at <strong style="color:var(--text)">${email}</strong>.</div>
+                <div class="apply-success-id">REF: ${id}</div>
+                <div style="margin-top:32px"><div class="btn" onclick="Router.navigate('#home')">Back to HQ</div></div>
+              </div>`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ===== RENDER FAQ =====
+        function renderFaq() {
+            const faqs = [
+                { cat: 'Platform & Features', q: 'What is VANGUARD and how does it work?', a: 'VANGUARD is an elite tactical stats platform that aggregates and analyzes your performance data across <strong>Counter-Strike 2</strong> and <strong>Rainbow Six Siege</strong>. We pull data from official game APIs, FaceIt, and community hub platforms to build a comprehensive profile of your competitive career. Your stats are updated in real-time after each match, and our proprietary scoring systems — like the <strong>Lethality Index</strong> — provide deep insight beyond basic K/D ratios.' },
+                { cat: 'Platform & Features', q: 'What is the Lethality Index and how is it calculated?', a: 'The <strong>Lethality Index</strong> is our cross-game scoring system (v1.0) that evaluates your overall combat effectiveness on a 0–100 scale. It uses a weighted formula that factors in multiple performance metrics:<ul><li><strong>Headshot percentage</strong> — measures mechanical precision</li><li><strong>Win rate</strong> — reflects consistency and impact on match outcomes</li><li><strong>K/D ratio</strong> — raw fragging ability per game</li><li><strong>FaceIt ELO / MMR</strong> — skill tier relative to the competitive pool</li></ul>Each factor has a weight multiplier that varies by game. Players are classified into tiers: <strong>Recruit</strong> (0–40), <strong>Operative</strong> (41–60), <strong>Specialist</strong> (61–75), <strong>Veteran</strong> (76–85), <strong>Lethal</strong> (86–94), and <strong>Apex Predator</strong> (95–100).' },
+                { cat: 'Platform & Features', q: 'How does the Match History viewer work?', a: 'The Match History section shows all your recent competitive matches with detailed breakdowns including score, K/D/A, HLTV-style rating, and timestamps. You can filter matches by:<ul><li><strong>Game</strong> — If you play both CS2 and R6, switch between them or view all together</li><li><strong>Queue Type</strong> — For CS2, filter between <strong>FaceIt</strong> matches and <strong>Matchmaking</strong> (Premier/Competitive). For R6, filter between <strong>Ranked</strong> and <strong>Community Hub</strong> matches</li></ul>The filters dynamically update — selecting CS2 as your game will only show FaceIt and Matchmaking as queue options, while selecting R6 shows Ranked and Community Hub.' },
+                { cat: 'Platform & Features', q: 'What is the Player Radar and what do the axes represent?', a: 'The <strong>Player Radar</strong> (or spider chart) is a visual breakdown of a player\'s strengths across six dimensions. For CS2, the axes are: <strong>Aim, Clutch, Utility, Game Sense, Impact,</strong> and <strong>Consistency</strong>. For R6, they are: <strong>Fragging, Intel, Utility, Teamplay, Impact,</strong> and <strong>Consistency</strong>. Each axis is scored from 0 to 1.0 based on historical performance data. A wider radar indicates a more well-rounded player, while spikes show specialist strengths.' },
+                { cat: 'CS2 & FaceIt', q: 'What is FaceIt ELO and what are realistic levels?', a: 'FaceIt ELO is the numerical skill rating used on the FaceIt matchmaking platform for CS2. It starts at <strong>100 ELO</strong> and has no hard upper cap. The levels are:<ul><li><strong>Level 1</strong>: 100–500 ELO</li><li><strong>Level 2</strong>: 501–750</li><li><strong>Level 3</strong>: 751–900</li><li><strong>Level 4</strong>: 901–1,050</li><li><strong>Level 5</strong>: 1,051–1,200</li><li><strong>Level 6</strong>: 1,201–1,350</li><li><strong>Level 7</strong>: 1,351–1,530</li><li><strong>Level 8</strong>: 1,531–1,750</li><li><strong>Level 9</strong>: 1,751–2,000</li><li><strong>Level 10</strong>: 2,001+</li></ul>Most new players start at around <strong>1,000 ELO</strong> (Level 4). Top professional players typically reach <strong>3,000–4,500 ELO</strong>, with the absolute best occasionally pushing beyond 4,000. The leaderboard\'s top 1,000 players per region can earn <strong>Challenger</strong> status.' },
+                { cat: 'CS2 & FaceIt', q: 'What is the difference between FaceIt and in-game Matchmaking for CS2?', a: 'CS2 has two primary competitive queues:<ul><li><strong>FaceIt</strong> — A third-party platform with 128-tick servers, anti-cheat (FaceIt AC), ELO-based ranking, and a more competitive environment. Matches use <strong>MR12</strong> format (first to 13 rounds). FaceIt is preferred by serious players and pros due to better server quality and stricter anti-cheat.</li><li><strong>Matchmaking (Premier/Competitive)</strong> — Valve\'s official in-game ranked system. Uses CS Rating (Premier) or rank groups (Competitive). Also MR12 format. More accessible but generally considered less competitive than FaceIt at higher levels.</li></ul>On VANGUARD, matches are tagged with their queue type so you can compare your performance across both platforms.' },
+                { cat: 'Rainbow Six Siege', q: 'Does R6 Siege have official FaceIt matchmaking?', a: 'No, <strong>Rainbow Six Siege does not have official FaceIt matchmaking</strong> like CS2 does. Instead, the R6 competitive scene uses:<ul><li><strong>Ranked</strong> — Ubisoft\'s official in-game ranked mode with MMR-based matchmaking. Matches are first to 4 rounds (BO7), with overtime if tied 3–3.</li><li><strong>Community Hubs</strong> — Third-party platforms and community-organized hubs (such as those on FaceIt) offer custom matchmaking with curated rule sets, higher-quality lobbies, and often stricter moderation. These are popular among high-level and semi-pro players.</li></ul>On VANGUARD, we track both queue types separately so you can see how your performance differs between official ranked and the more structured community hub environment.' },
+                { cat: 'Rainbow Six Siege', q: 'How does the R6 Siege ranking system work?', a: 'R6 Siege uses an <strong>MMR (Matchmaking Rating)</strong> system for ranked play. You start each season with a soft reset and play placement matches. Ranks range from <strong>Copper</strong> to <strong>Champion</strong>:<ul><li>Copper → Bronze → Silver → Gold → Platinum → Emerald → Diamond → <strong>Champion</strong></li></ul>Champion is the highest rank, reserved for the top 9,999 players globally. Matches are played in a <strong>first to 4 rounds</strong> format (best of 7). If the score reaches 3–3, an overtime round decides the winner. Our platform displays your current rank, global position (for Champions), and tracks your MMR progression.' },
+                { cat: 'Match Scores & Formats', q: 'Why do CS2 match scores go to 13 instead of 16?', a: 'In 2023, Valve updated CS2 to use the <strong>MR12 (Max Rounds 12)</strong> format, replacing the old MR15 format from CS:GO. Under MR12, each half consists of 12 rounds, and the first team to win <strong>13 rounds</strong> wins the match. If the score is tied 12–12 at the end of regulation, overtime rounds are played in sets of 3 (MR3). This change was made to shorten match times and improve competitive pacing. All scores on VANGUARD reflect the current MR12 format.' },
+                { cat: 'Match Scores & Formats', q: 'Why do R6 Siege match scores only go to 4?', a: 'Rainbow Six Siege ranked matches use a <strong>best-of-7 (BO7)</strong> format, meaning the first team to win <strong>4 rounds</strong> wins the match. Each round involves one team attacking and one defending, with sides switching at halftime (after 6 rounds total). If tied 3–3, an overtime tiebreaker round is played. This shorter format compared to CS2 is by design — R6 rounds are typically longer and more complex, with preparation phases, destructible environments, and gadget management.' },
+                { cat: 'Profiles & Community', q: 'How do I get a verified profile on VANGUARD?', a: 'Verified profiles are available to players who meet certain criteria. There are two verification tiers:<ul><li><strong>Pro Verified</strong> — Reserved for active professional players, coaches, and content creators with verified competitive history. Includes a special badge on your profile.</li><li><strong>Community Verified</strong> — Available to players who apply through our <strong>Apply for Profile</strong> page and meet the minimum requirements (e.g., FaceIt Level 7+ for CS2, Platinum+ for R6, or equivalent competitive experience).</li></ul>Apply through the "Apply" tab in the navigation. Applications are reviewed manually and typically processed within 48 hours.' },
+                { cat: 'Profiles & Community', q: 'Can I compare my stats with other players?', a: 'Yes! VANGUARD features a <strong>Head-to-Head (H2H)</strong> comparison tool. Navigate to the "Head-to-Head" page from the main menu, select two operators, and choose a game (CS2 or R6). The tool generates a side-by-side comparison of key stats including K/D, win rate, headshot percentage, and Lethality Index. Radar charts visually overlay both players\' strengths, making it easy to see who excels in which areas.' },
+                { cat: 'Profiles & Community', q: 'How often are player stats updated?', a: 'Player stats on VANGUARD are updated <strong>in near real-time</strong>. Match results typically appear within a few minutes of completion. The Lethality Index recalculates after each new match, and leaderboard positions update dynamically. FaceIt ELO and in-game ranks are synced from their respective APIs. The "Live Feed" on the home page shows real-time activity including match completions, rank changes, and notable achievements as they happen.' }
+            ];
+
+            let html = `<div class="faq-hero"><div class="hero-bg"></div><div class="hero-grid"></div>
+                <div style="position:relative;z-index:2">
+                    <div class="faq-hero-title">FREQUENTLY <span>ASKED</span></div>
+                    <div class="faq-hero-sub">EVERYTHING YOU NEED TO KNOW ABOUT VANGUARD</div>
+                </div>
+            </div>
+            <div class="section">`;
+
+            let currentCat = '';
+            faqs.forEach((f, i) => {
+                if (f.cat !== currentCat) {
+                    currentCat = f.cat;
+                    html += `<div class="faq-cat">${currentCat}</div>`;
+                }
+                html += `<div class="faq-item" id="faq${i}">
+                    <div class="faq-q" onclick="toggleFaq(${i})">
+                        <div class="faq-num">${String(i + 1).padStart(2, '0')}</div>
+                        <div class="faq-q-text">${f.q}</div>
+                        <div class="faq-toggle">+</div>
+                    </div>
+                    <div class="faq-a"><div class="faq-a-inner">${f.a}</div></div>
+                </div>`;
+            });
+
+            html += `</div>`;
+            return html;
+        }
+
+        function toggleFaq(idx) {
+            const el = document.getElementById('faq' + idx);
+            if (!el) return;
+            const isOpen = el.classList.contains('open');
+            document.querySelectorAll('.faq-item.open').forEach(item => item.classList.remove('open'));
+            if (!isOpen) el.classList.add('open');
+        }
+
+        Router.register('home', () => renderHome());
+        Router.register('players', () => renderPlayers());
+        Router.register('leaderboards', () => renderLeaderboards());
+        Router.register('profile', (id) => { mhActiveGame = 'all'; mhActiveQueue = 'all'; return renderProfile(id); });
+        Router.register('h2h', () => renderH2H());
+        Router.register('live', () => renderLive());
+        Router.register('apply', () => renderApply());
+        Router.register('faq', () => renderFaq());
+
+        // ===== INIT =====
+        updateNav('home');
+        Router.init();
+
+        // Warning modal
+        function dismissWarning() {
+            const modal = document.getElementById('warnModal');
+            if (document.getElementById('warnDontShow').checked) {
+                localStorage.setItem('vanguard_hide_warn', '1');
+            }
+            modal.style.opacity = '0';
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+        if (!localStorage.getItem('vanguard_hide_warn')) {
+            document.getElementById('warnModal').style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>
