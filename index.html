@@ -1798,6 +1798,346 @@
             margin-top: 12px
         }
 
+        /* OVERWOLF APP PAGE */
+        .app-hero {
+            position: relative;
+            padding: 80px 24px 50px;
+            text-align: center;
+            overflow: hidden
+        }
+
+        .app-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center top, rgba(192, 57, 43, .12) 0%, transparent 70%);
+            pointer-events: none
+        }
+
+        .app-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(192, 57, 43, .1);
+            border: 1px solid var(--border-bright);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--red-bright);
+            letter-spacing: 2px;
+            margin-bottom: 20px
+        }
+
+        .app-title {
+            font-family: var(--font-d);
+            font-size: clamp(36px, 6vw, 64px);
+            color: var(--white);
+            letter-spacing: 4px;
+            line-height: 1
+        }
+
+        .app-title span {
+            color: var(--red-bright)
+        }
+
+        .app-desc {
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-mid);
+            letter-spacing: .5px;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 16px auto 0
+        }
+
+        .app-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 32px
+        }
+
+        .app-feat {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: left;
+            transition: .3s
+        }
+
+        .app-feat:hover {
+            border-color: var(--border-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(192, 57, 43, .08)
+        }
+
+        .app-feat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: rgba(192, 57, 43, .1);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px
+        }
+
+        .app-feat-icon svg {
+            width: 18px;
+            height: 18px
+        }
+
+        .app-feat-title {
+            font-family: var(--font-d);
+            font-size: 18px;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 8px
+        }
+
+        .app-feat-desc {
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--text-mid);
+            letter-spacing: .3px;
+            line-height: 1.7
+        }
+
+        .app-dl {
+            margin-top: 40px;
+            padding: 40px 24px;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px
+        }
+
+        .app-dl-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 36px;
+            background: var(--red);
+            color: var(--white);
+            font-family: var(--font-d);
+            font-size: 20px;
+            letter-spacing: 3px;
+            border: 1px solid var(--red-bright);
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: .3s
+        }
+
+        .app-dl-btn:hover {
+            background: var(--red-bright);
+            box-shadow: 0 0 30px rgba(231, 76, 60, .3);
+            transform: translateY(-2px)
+        }
+
+        .app-dl-note {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-top: 14px
+        }
+
+        .app-reqs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 24px;
+            text-align: left
+        }
+
+        .app-req {
+            background: rgba(0, 0, 0, .3);
+            border-radius: 6px;
+            padding: 14px 16px
+        }
+
+        .app-req-label {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 4px
+        }
+
+        .app-req-val {
+            font-family: var(--font-m);
+            font-size: 11px;
+            color: var(--text-mid);
+            letter-spacing: .3px
+        }
+
+        /* TRAINING HUB */
+        .train-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 24px
+        }
+
+        .train-tab {
+            font-family: var(--font-m);
+            font-size: 10px;
+            letter-spacing: 1px;
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            background: transparent;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .train-tab:hover {
+            border-color: var(--border-bright);
+            color: var(--text)
+        }
+
+        .train-tab.active {
+            background: var(--red);
+            border-color: var(--red-bright);
+            color: var(--white)
+        }
+
+        .train-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px
+        }
+
+        .train-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: .3s;
+            cursor: default
+        }
+
+        .train-card:hover {
+            border-color: var(--border-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(192, 57, 43, .08)
+        }
+
+        .train-card-header {
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px
+        }
+
+        .train-card-game {
+            font-family: var(--font-m);
+            font-size: 8px;
+            letter-spacing: 2px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            flex-shrink: 0
+        }
+
+        .train-card-game.cs2 {
+            background: rgba(46, 204, 113, .1);
+            color: #2ecc71;
+            border: 1px solid rgba(46, 204, 113, .3)
+        }
+
+        .train-card-game.r6 {
+            background: rgba(52, 152, 219, .1);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, .3)
+        }
+
+        .train-card-title {
+            font-family: var(--font-d);
+            font-size: 18px;
+            color: var(--white);
+            letter-spacing: 1px;
+            line-height: 1.2
+        }
+
+        .train-card-body {
+            padding: 14px 20px 18px
+        }
+
+        .train-card-desc {
+            font-family: var(--font-m);
+            font-size: 10px;
+            color: var(--text-mid);
+            letter-spacing: .3px;
+            line-height: 1.7;
+            margin-bottom: 14px
+        }
+
+        .train-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .train-badge {
+            font-family: var(--font-m);
+            font-size: 8px;
+            letter-spacing: 1px;
+            padding: 3px 8px;
+            border-radius: 3px;
+            border: 1px solid var(--border)
+        }
+
+        .train-badge.beginner {
+            color: #2ecc71;
+            border-color: rgba(46, 204, 113, .3)
+        }
+
+        .train-badge.intermediate {
+            color: #f39c12;
+            border-color: rgba(243, 156, 18, .3)
+        }
+
+        .train-badge.advanced {
+            color: #e74c3c;
+            border-color: rgba(231, 76, 60, .3)
+        }
+
+        .train-badge.pro {
+            color: var(--red-bright);
+            border-color: var(--border-bright);
+            background: rgba(192, 57, 43, .08)
+        }
+
+        .train-card-time {
+            font-family: var(--font-m);
+            font-size: 8px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-left: auto
+        }
+
+        .train-collab {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: .3px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border)
+        }
+
+        .train-collab strong {
+            color: var(--red-bright)
+        }
+
         .faq-list {
             display: flex;
             flex-direction: column;
@@ -2799,7 +3139,7 @@
         };
 
         // ===== NAV =====
-        const NAV_ITEMS = [{ id: 'home', label: 'Home' }, { id: 'players', label: 'Players' }, { id: 'leaderboards', label: 'Ranks' }, { id: 'live', label: 'Live' }, { id: 'h2h', label: 'H2H' }, { id: 'apply', label: 'Apply' }, { id: 'faq', label: 'FAQ' }];
+        const NAV_ITEMS = [{ id: 'home', label: 'Home' }, { id: 'players', label: 'Players' }, { id: 'leaderboards', label: 'Ranks' }, { id: 'live', label: 'Live' }, { id: 'h2h', label: 'H2H' }, { id: 'train', label: 'Train' }, { id: 'app', label: 'R6 App' }, { id: 'apply', label: 'Apply' }, { id: 'faq', label: 'FAQ' }];
         function updateNav(active) {
             document.getElementById('navLinks').innerHTML = NAV_ITEMS.map(n => `<div class="nav-link${active === n.id ? ' active' : ''}" onclick="Router.navigate('#${n.id}')">${n.label}</div>`).join('');
         }
@@ -3170,36 +3510,44 @@
 
         // ===== RENDER LIVE FEED =====
         const FEED_TEMPLATES = [
-            { icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> got an ACE on ${randMap('cs2')}` },
-            { icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> clutched a 1v${1 + Math.floor(Math.random() * 4)} on ${randMap('cs2')}` },
-            { icon: 'trophy', tpl: (p) => `<strong>${p}</strong> won ${2 + Math.floor(Math.random() * 6)} matches in a row` },
-            { icon: 'flame', tpl: (p) => `<strong>${p}</strong> hit a ${(1.2 + Math.random() * 0.8).toFixed(2)} rating on ${randMap('cs2')}` },
-            { icon: 'skull', tpl: (p) => `<strong>${p}</strong> dropped ${14 + Math.floor(Math.random() * 16)} kills on ${randMap('r6')}` },
-            { icon: 'chart', tpl: (p) => `<strong>${p}</strong> climbed to ${2800 + Math.floor(Math.random() * 600)} ELO on FaceIt` },
-            { icon: 'gamepad', tpl: (p) => `<strong>${p}</strong> queued for competitive matchmaking` },
-            { icon: 'shield', tpl: (p) => `<strong>${p}</strong> clutched a 1v${1 + Math.floor(Math.random() * 3)} on ${randMap('r6')}` },
-            { icon: 'bolt', tpl: (p) => `<strong>${p}</strong> is now online` },
-            { icon: 'rifle', tpl: (p) => `<strong>${p}</strong> hit ${50 + Math.floor(Math.random() * 30)}% HS rate this session` },
-            { icon: 'medal', tpl: (p) => `<strong>${p}</strong> earned MVP on ${randMap('any')}` },
-            { icon: 'burst', tpl: (p) => `<strong>${p}</strong> won FaceIt match 13–${Math.floor(Math.random() * 10)}` },
-            { icon: 'swords', tpl: (p) => `<strong>${p}</strong> finished ranked match ${4}–${Math.floor(Math.random() * 4)} on ${randMap('r6')}` },
-            { icon: 'trophy', tpl: (p) => `<strong>${p}</strong> reached a new rank milestone` },
-            { icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> got a 4K on ${randMap('cs2')}` },
-            { icon: 'flame', tpl: (p) => `<strong>${p}</strong> is on a ${3 + Math.floor(Math.random() * 8)} win streak` },
-            { icon: 'chart', tpl: (p) => `<strong>${p}</strong> gained ${10 + Math.floor(Math.random() * 35)} ELO this session` },
-            { icon: 'skull', tpl: (p) => `<strong>${p}</strong> scored a headshot-only round on ${randMap('cs2')}` },
-            { icon: 'gamepad', tpl: (p) => `<strong>${p}</strong> started a new ranked session` },
-            { icon: 'shield', tpl: (p) => `<strong>${p}</strong> planted the defuser in a 1v${1 + Math.floor(Math.random() * 2)} on ${randMap('r6')}` },
-            { icon: 'bolt', tpl: (p) => `<strong>${p}</strong> went offline` },
-            { icon: 'medal', tpl: (p) => `<strong>${p}</strong> hit ${(1.1 + Math.random() * 0.7).toFixed(2)} K/D this match` },
-            { icon: 'rifle', tpl: (p) => `<strong>${p}</strong> got an opening kill on ${randMap('any')}` },
-            { icon: 'burst', tpl: (p) => `<strong>${p}</strong> won a Hub match on ${randMap('r6')}` },
+            { game: 'cs2', icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> got an ACE on ${randMap('cs2')}` },
+            { game: 'cs2', icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> clutched a 1v${1 + Math.floor(Math.random() * 4)} on ${randMap('cs2')}` },
+            { game: 'any', icon: 'trophy', tpl: (p) => `<strong>${p}</strong> won ${2 + Math.floor(Math.random() * 6)} matches in a row` },
+            { game: 'cs2', icon: 'flame', tpl: (p) => `<strong>${p}</strong> hit a ${(1.2 + Math.random() * 0.8).toFixed(2)} rating on ${randMap('cs2')}` },
+            { game: 'r6', icon: 'skull', tpl: (p) => `<strong>${p}</strong> dropped ${14 + Math.floor(Math.random() * 16)} kills on ${randMap('r6')}` },
+            { game: 'cs2', icon: 'chart', tpl: (p) => `<strong>${p}</strong> climbed to ${2800 + Math.floor(Math.random() * 600)} ELO on FaceIt` },
+            { game: 'any', icon: 'gamepad', tpl: (p) => `<strong>${p}</strong> queued for competitive matchmaking` },
+            { game: 'r6', icon: 'shield', tpl: (p) => `<strong>${p}</strong> clutched a 1v${1 + Math.floor(Math.random() * 3)} on ${randMap('r6')}` },
+            { game: 'any', icon: 'bolt', tpl: (p) => `<strong>${p}</strong> is now online` },
+            { game: 'any', icon: 'rifle', tpl: (p) => `<strong>${p}</strong> hit ${50 + Math.floor(Math.random() * 30)}% HS rate this session` },
+            { game: 'cs2', icon: 'burst', tpl: (p) => `<strong>${p}</strong> won FaceIt match 13–${Math.floor(Math.random() * 10)}` },
+            { game: 'r6', icon: 'swords', tpl: (p) => `<strong>${p}</strong> finished ranked match ${4}–${Math.floor(Math.random() * 4)} on ${randMap('r6')}` },
+            { game: 'any', icon: 'trophy', tpl: (p) => `<strong>${p}</strong> reached a new rank milestone` },
+            { game: 'cs2', icon: 'crosshair', tpl: (p) => `<strong>${p}</strong> got a 4K on ${randMap('cs2')}` },
+            { game: 'any', icon: 'flame', tpl: (p) => `<strong>${p}</strong> is on a ${3 + Math.floor(Math.random() * 8)} win streak` },
+            { game: 'any', icon: 'chart', tpl: (p) => `<strong>${p}</strong> gained ${10 + Math.floor(Math.random() * 35)} ELO this session` },
+            { game: 'cs2', icon: 'skull', tpl: (p) => `<strong>${p}</strong> scored a headshot-only round on ${randMap('cs2')}` },
+            { game: 'any', icon: 'gamepad', tpl: (p) => `<strong>${p}</strong> started a new ranked session` },
+            { game: 'r6', icon: 'shield', tpl: (p) => `<strong>${p}</strong> planted the defuser in a 1v${1 + Math.floor(Math.random() * 2)} on ${randMap('r6')}` },
+            { game: 'any', icon: 'bolt', tpl: (p) => `<strong>${p}</strong> went offline` },
+            { game: 'any', icon: 'medal', tpl: (p) => `<strong>${p}</strong> hit ${(1.1 + Math.random() * 0.7).toFixed(2)} K/D this match` },
+            { game: 'r6', icon: 'medal', tpl: (p) => `<strong>${p}</strong> earned MVP on ${randMap('r6')}` },
+            { game: 'cs2', icon: 'rifle', tpl: (p) => `<strong>${p}</strong> got an opening kill on ${randMap('cs2')}` },
+            { game: 'r6', icon: 'burst', tpl: (p) => `<strong>${p}</strong> won a Hub match on ${randMap('r6')}` },
         ];
         const CS2_MAPS = ['Dust II', 'Mirage', 'Inferno', 'Nuke', 'Ancient', 'Anubis', 'Vertigo'];
         const R6_MAPS = ['Oregon', 'Border', 'Clubhouse', 'Consulate', 'Coastline', 'Kafe', 'Chalet', 'Villa'];
         function randMap(g) { if (g === 'r6') return R6_MAPS[Math.floor(Math.random() * R6_MAPS.length)]; if (g === 'cs2') return CS2_MAPS[Math.floor(Math.random() * CS2_MAPS.length)]; return Math.random() > .5 ? CS2_MAPS[Math.floor(Math.random() * CS2_MAPS.length)] : R6_MAPS[Math.floor(Math.random() * R6_MAPS.length)]; }
         function randPlayer() { return PLAYERS[Math.floor(Math.random() * PLAYERS.length)]; }
-        function genEvent() { const t = FEED_TEMPLATES[Math.floor(Math.random() * FEED_TEMPLATES.length)]; const p = randPlayer(); return { icon: ICN[t.icon], text: t.tpl(p.name + (p.clan ? '.' + p.clan : '')) }; }
+        function genEvent() {
+            const p = randPlayer();
+            const playerGames = [];
+            if (p.cs2) playerGames.push('cs2');
+            if (p.r6) playerGames.push('r6');
+            const valid = FEED_TEMPLATES.filter(t => t.game === 'any' || playerGames.includes(t.game));
+            const t = valid[Math.floor(Math.random() * valid.length)];
+            return { icon: ICN[t.icon], text: t.tpl(p.name + (p.clan ? '.' + p.clan : '')) };
+        }
 
         let liveFeedTimer = null;
         const liveEvents = [];
@@ -3307,6 +3655,156 @@
         }
 
         // ===== REGISTER ROUTES =====
+        // ===== RENDER TRAINING HUB =====
+        let trainActiveTab = 'all';
+        let trainActiveDiff = 'all';
+        const TRAINING_GUIDES = [
+            { game: 'cs2', title: 'Aim Training Fundamentals', diff: 'beginner', time: '8 min', pro: 's1mple', desc: 'Master the basics of aim in CS2. This guide covers mouse sensitivity, DPI settings, crosshair placement at head level, and essential aim training routines used by professionals. Includes daily practice drills for Aim Botz and custom workshop maps.' },
+            { game: 'cs2', title: 'Crosshair Placement Mastery', diff: 'intermediate', time: '12 min', pro: 'NiKo', desc: 'Crosshair placement is the difference between a Level 5 and Level 10 player. Learn pre-aim angles, common head-level references on every competitive map, and how to clear angles efficiently. Developed with NiKo\'s input on peeking methodology.' },
+            { game: 'cs2', title: 'Map Control & Positioning', diff: 'intermediate', time: '15 min', pro: 'ZywOo', desc: 'Understanding map control wins rounds before fights begin. This guide breaks down early-round positioning, mid-round rotations, and information gathering on Dust II, Mirage, Inferno, and Nuke. Includes ZywOo\'s approach to reading the game.' },
+            { game: 'cs2', title: 'Utility Usage & Smokes', diff: 'advanced', time: '20 min', pro: 'VANGUARD Team', desc: 'Complete smoke, flash, and molotov line-up guide for all competitive maps in the MR12 format. Covers execute smokes, retake flashes, anti-rush mollies, and one-way smokes. Updated for the latest map versions with pixel-perfect positions.' },
+            { game: 'cs2', title: 'Game Sense & Decision Making', diff: 'advanced', time: '18 min', pro: 'donk', desc: 'Develop the instincts that separate good players from great ones. Learn how to read opponent patterns, predict rotations, manage economy across MR12 halves, and make clutch decisions under pressure. Features analysis from donk\'s demo reviews.' },
+            { game: 'cs2', title: 'Clutch Situations & 1vX', diff: 'advanced', time: '14 min', pro: 's1mple', desc: 'How to win rounds when the odds are against you. Covers time management, sound cues, baiting shots, isolating fights in 1v2/1v3 situations, and post-plant positioning. Includes breakdowns of iconic pro clutches and what made them work.' },
+            { game: 'r6', title: 'Operator Selection Guide', diff: 'beginner', time: '10 min', pro: 'Beaulo', desc: 'Choosing the right operator is critical in Rainbow Six Siege. This guide covers the best operators for each role (entry, support, anchor, roamer, intel), recommended loadouts, and when to flex your pick based on map and team composition.' },
+            { game: 'r6', title: 'Communication & Callouts', diff: 'beginner', time: '8 min', pro: 'VANGUARD Team', desc: 'Clear communication wins games. Learn standardized callout names for every ranked map, how to relay intel efficiently, and when to make calls vs. staying quiet. Covers compass callouts, room names, and pinging techniques.' },
+            { game: 'r6', title: 'Droning & Intel Gathering', diff: 'intermediate', time: '12 min', pro: 'Shaiiko', desc: 'Your drone is your most valuable tool. Learn pre-round drone pathing, how to save drones for mid-round intel, coordinated drone-and-push strategies, and advanced droning techniques like pixel droning and bait droning.' },
+            { game: 'r6', title: 'Site Anchoring & Defense', diff: 'intermediate', time: '14 min', pro: 'Paluh', desc: 'Holding site is more than sitting in a corner. This guide covers anchor positioning, rotation timing, utility denial, crossfire setups, and how to delay attackers. Includes Paluh\'s defensive strategies for Oregon, Clubhouse, and Border.' },
+            { game: 'r6', title: 'Retakes & Post-Plant', diff: 'advanced', time: '16 min', pro: 'Beaulo', desc: 'When attackers plant the defuser, every second counts. Learn optimal retake routes, how to deny plants, post-plant crossfire angles, and defuser denial strategies. Covers attacker post-plant positioning and how to counter it.' },
+            { game: 'r6', title: 'Vertical Play & Destruction', diff: 'advanced', time: '18 min', pro: 'Shaiiko', desc: 'Siege\'s destructible environments are a weapon. Master vertical play — opening floors and ceilings, creating murder holes, denying vertical control, and using destruction to reshape site layouts. Includes site-specific vertical strategies for every ranked map.' }
+        ];
+
+        function renderTraining() {
+            return `
+    <div class="app-hero">
+        <div class="hero-bg"></div><div class="hero-grid"></div>
+        <div style="position:relative;z-index:2">
+            <div class="app-badge">${ICN.medal} VANGUARD VERIFIED</div>
+            <div class="app-title">TRAINING <span>HUB</span></div>
+            <div class="app-desc">Level up your gameplay with guides and tutorials crafted by the VANGUARD team, verified by professional players and officials. From fundamentals to advanced strategies.</div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-head"><div><div class="section-title">Guides & <span>Tutorials</span></div><div class="section-sub">Pro-verified training content</div></div></div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:24px">
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--text-dim);letter-spacing:2px">GAME</div>
+            <div class="train-tabs" style="margin-bottom:0" id="trainGameTabs">
+                <div class="train-tab${trainActiveTab === 'all' ? ' active' : ''}" onclick="filterTraining('all')">ALL</div>
+                <div class="train-tab${trainActiveTab === 'cs2' ? ' active' : ''}" onclick="filterTraining('cs2')">CS2</div>
+                <div class="train-tab${trainActiveTab === 'r6' ? ' active' : ''}" onclick="filterTraining('r6')">R6 SIEGE</div>
+            </div>
+            <div style="width:1px;height:20px;background:var(--border);margin:0 4px"></div>
+            <div style="font-family:var(--font-m);font-size:8px;color:var(--text-dim);letter-spacing:2px">DIFFICULTY</div>
+            <div class="train-tabs" style="margin-bottom:0" id="trainDiffTabs">
+                <div class="train-tab${trainActiveDiff === 'all' ? ' active' : ''}" onclick="filterDifficulty('all')">ALL</div>
+                <div class="train-tab${trainActiveDiff === 'beginner' ? ' active' : ''}" onclick="filterDifficulty('beginner')">BEGINNER</div>
+                <div class="train-tab${trainActiveDiff === 'intermediate' ? ' active' : ''}" onclick="filterDifficulty('intermediate')">INTERMEDIATE</div>
+                <div class="train-tab${trainActiveDiff === 'advanced' ? ' active' : ''}" onclick="filterDifficulty('advanced')">ADVANCED</div>
+            </div>
+        </div>
+        <div class="train-grid" id="trainGrid">
+            ${renderTrainCards()}
+        </div>
+    </div>`;
+        }
+
+        function renderTrainCards() {
+            const filtered = TRAINING_GUIDES.filter(g =>
+                (trainActiveTab === 'all' || g.game === trainActiveTab) &&
+                (trainActiveDiff === 'all' || g.diff === trainActiveDiff)
+            );
+            if (filtered.length === 0) return `<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:var(--font-m);font-size:10px;color:var(--text-dim);letter-spacing:1px">No guides match the selected filters</div>`;
+            return filtered.map(g => `
+            <div class="train-card reveal">
+                <div class="train-card-header">
+                    <div class="train-card-title">${g.title}</div>
+                    <div class="train-card-game ${g.game}">${g.game === 'cs2' ? 'CS2' : 'R6'}</div>
+                </div>
+                <div class="train-card-body">
+                    <div class="train-card-desc">${g.desc}</div>
+                    <div class="train-card-meta">
+                        <div class="train-badge ${g.diff}">${g.diff.toUpperCase()}</div>
+                        <div class="train-badge pro">${ICN.check} VERIFIED</div>
+                        <div class="train-card-time">${g.time} read</div>
+                    </div>
+                    <div class="train-collab">Collaborated with <strong>${g.pro}</strong></div>
+                </div>
+            </div>`).join('');
+        }
+
+        function updateTrainGrid() {
+            const grid = document.getElementById('trainGrid');
+            if (grid) grid.innerHTML = renderTrainCards();
+            initReveal();
+        }
+
+        function filterTraining(tab) {
+            trainActiveTab = tab;
+            document.querySelectorAll('#trainGameTabs .train-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            updateTrainGrid();
+        }
+
+        function filterDifficulty(diff) {
+            trainActiveDiff = diff;
+            document.querySelectorAll('#trainDiffTabs .train-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            updateTrainGrid();
+        }
+
+        // ===== RENDER OVERWOLF APP =====
+        function renderOverwolfApp() {
+            const features = [
+                { icon: ICN.crosshair, title: 'LIVE MATCH OVERLAY', desc: 'See real-time K/D, KPR (Kills Per Round), headshot %, survival rate, entries, plants, and first deaths tracked per round — all displayed as a clean overlay while you play.' },
+                { icon: ICN.shield, title: 'OPERATOR ANALYTICS', desc: 'Deep-dive into your performance on every operator. View win rate, K/D, average kills, and total playtime per op to identify your best picks for attack and defense.' },
+                { icon: ICN.chart, title: 'MMR TRACKER', desc: 'Track your ranked MMR in real-time with a visual progress bar. See estimated games to rank up or down, and get notified when you hit a new rank milestone.' },
+                { icon: ICN.target, title: 'MAP & WEAPON STATS', desc: 'Your historical win rate on every map, broken down by attack vs. defense. Plus weapon accuracy, headshot %, and favorite loadout stats.' },
+                { icon: ICN.swords, title: 'RIVALS & ALLIES', desc: 'Track recurring opponents and teammates. See your win rate against specific players, identify tough rivals, and find your most synergistic duo partners.' },
+                { icon: ICN.skull, title: 'OPPONENT INTEL', desc: 'Before each round, view the enemy team\'s ranks, MMR, win rates, and most-played operators. Know who to watch out for and plan your strategy accordingly.' }
+            ];
+            return `
+    <div class="app-hero">
+        <div class="hero-bg"></div><div class="hero-grid"></div>
+        <div style="position:relative;z-index:2">
+            <div class="app-badge">${ICN.gamepad} POWERED BY OVERWOLF</div>
+            <div class="app-title">VANGUARD <span>R6 APP</span></div>
+            <div class="app-desc">The ultimate in-game companion for Rainbow Six Siege. Get real-time stats, opponent intel, operator analytics, and MMR tracking — all in a sleek overlay powered by Overwolf. Ubisoft approved, 100% safe.</div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-head"><div><div class="section-title">App <span>Features</span></div><div class="section-sub">Everything the overlay provides</div></div></div>
+        <div class="app-features">
+            ${features.map(f => `<div class="app-feat reveal">
+                <div class="app-feat-icon">${f.icon}</div>
+                <div class="app-feat-title">${f.title}</div>
+                <div class="app-feat-desc">${f.desc}</div>
+            </div>`).join('')}
+        </div>
+
+        <div class="app-dl">
+            <div style="font-family:var(--font-d);font-size:28px;color:var(--white);letter-spacing:3px;margin-bottom:6px">READY TO <span style="color:var(--red-bright)">DOMINATE</span>?</div>
+            <div style="font-family:var(--font-m);font-size:10px;color:var(--text-mid);letter-spacing:.5px;margin-bottom:24px">Download the VANGUARD R6 App and gain the tactical edge</div>
+            <a href="https://www.overwolf.com/app/vanguard-r6-tracker" target="_blank" class="app-dl-btn">${ICN.gamepad} DOWNLOAD VIA OVERWOLF</a>
+            <div class="app-dl-note">Free · Windows only · Requires Overwolf client · ~45 MB</div>
+
+            <div style="font-family:var(--font-d);font-size:16px;color:var(--text-mid);letter-spacing:2px;margin-top:32px;margin-bottom:8px">SYSTEM REQUIREMENTS</div>
+            <div class="app-reqs">
+                <div class="app-req"><div class="app-req-label">Operating System</div><div class="app-req-val">Windows 10 / 11 (64-bit)</div></div>
+                <div class="app-req"><div class="app-req-label">Platform</div><div class="app-req-val">Overwolf Client (free)</div></div>
+                <div class="app-req"><div class="app-req-label">Memory</div><div class="app-req-val">4 GB RAM minimum</div></div>
+                <div class="app-req"><div class="app-req-label">Storage</div><div class="app-req-val">~45 MB disk space</div></div>
+            </div>
+        </div>
+
+        <div style="margin-top:32px;padding:24px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;gap:16px">
+            <div style="width:40px;height:40px;border-radius:8px;background:rgba(46,204,113,.1);border:1px solid rgba(46,204,113,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">${ICN.check}</div>
+            <div>
+                <div style="font-family:var(--font-d);font-size:14px;color:var(--green);letter-spacing:2px">UBISOFT APPROVED</div>
+                <div style="font-family:var(--font-m);font-size:9px;color:var(--text-mid);letter-spacing:.3px;margin-top:4px">This app is built on the Overwolf platform and only reads data from the official Ubisoft API. It does not modify game files, inject code, or violate any Terms of Service. Zero risk of ban.</div>
+            </div>
+        </div>
+    </div>`;
+        }
+
         // ===== RENDER APPLY =====
         function renderApply() {
             return `
@@ -3460,7 +3958,10 @@
                 { cat: 'Match Scores & Formats', q: 'Why do R6 Siege match scores only go to 4?', a: 'Rainbow Six Siege ranked matches use a <strong>best-of-7 (BO7)</strong> format, meaning the first team to win <strong>4 rounds</strong> wins the match. Each round involves one team attacking and one defending, with sides switching at halftime (after 6 rounds total). If tied 3–3, an overtime tiebreaker round is played. This shorter format compared to CS2 is by design — R6 rounds are typically longer and more complex, with preparation phases, destructible environments, and gadget management.' },
                 { cat: 'Profiles & Community', q: 'How do I get a verified profile on VANGUARD?', a: 'Verified profiles are available to players who meet certain criteria. There are two verification tiers:<ul><li><strong>Pro Verified</strong> — Reserved for active professional players, coaches, and content creators with verified competitive history. Includes a special badge on your profile.</li><li><strong>Community Verified</strong> — Available to players who apply through our <strong>Apply for Profile</strong> page and meet the minimum requirements (e.g., FaceIt Level 7+ for CS2, Platinum+ for R6, or equivalent competitive experience).</li></ul>Apply through the "Apply" tab in the navigation. Applications are reviewed manually and typically processed within 48 hours.' },
                 { cat: 'Profiles & Community', q: 'Can I compare my stats with other players?', a: 'Yes! VANGUARD features a <strong>Head-to-Head (H2H)</strong> comparison tool. Navigate to the "Head-to-Head" page from the main menu, select two operators, and choose a game (CS2 or R6). The tool generates a side-by-side comparison of key stats including K/D, win rate, headshot percentage, and Lethality Index. Radar charts visually overlay both players\' strengths, making it easy to see who excels in which areas.' },
-                { cat: 'Profiles & Community', q: 'How often are player stats updated?', a: 'Player stats on VANGUARD are updated <strong>in near real-time</strong>. Match results typically appear within a few minutes of completion. The Lethality Index recalculates after each new match, and leaderboard positions update dynamically. FaceIt ELO and in-game ranks are synced from their respective APIs. The "Live Feed" on the home page shows real-time activity including match completions, rank changes, and notable achievements as they happen.' }
+                { cat: 'Profiles & Community', q: 'How often are player stats updated?', a: 'Player stats on VANGUARD are updated <strong>in near real-time</strong>. Match results typically appear within a few minutes of completion. The Lethality Index recalculates after each new match, and leaderboard positions update dynamically. FaceIt ELO and in-game ranks are synced from their respective APIs. The "Live Feed" on the home page shows real-time activity including match completions, rank changes, and notable achievements as they happen.' },
+                { cat: 'VANGUARD R6 App', q: 'What is the VANGUARD R6 Overwolf App?', a: 'The <strong>VANGUARD R6 App</strong> is a free companion application built on the <strong>Overwolf</strong> platform specifically for Rainbow Six Siege players. It provides a real-time in-game overlay that displays live match stats, opponent intel, operator analytics, and MMR tracking directly on your screen while you play. The app reads data from the Ubisoft API — it never modifies game files and is <strong>100% compliant</strong> with Ubisoft\'s Terms of Service. It works with ranked, unranked, and community hub matches.' },
+                { cat: 'VANGUARD R6 App', q: 'What features does the R6 App overlay include?', a: 'The in-game overlay provides a wide range of real-time data:<ul><li><strong>Live Match Stats</strong> — K/D, KPR, headshot %, survival rate, entries, plants, and first deaths tracked per round</li><li><strong>Opponent Intel</strong> — View enemy team\'s ranks, MMR, win rates, and main operators before the match starts</li><li><strong>Operator Analytics</strong> — Your win rate, K/D, and playtime per operator to help you pick the right op</li><li><strong>Map Win Rates</strong> — Your historical performance on the current map, including attack vs. defense stats</li><li><strong>MMR Progress</strong> — Real-time tracking of your rank progression with estimated games to rank up/down</li><li><strong>Rivals & Allies</strong> — Stats against players you frequently face, and performance alongside recurring teammates</li></ul>All data is displayed in a clean, non-intrusive overlay that can be toggled with a hotkey or viewed on a second monitor.' },
+                { cat: 'VANGUARD R6 App', q: 'Is the Overwolf app safe to use? Will I get banned?', a: 'Yes, the app is <strong>completely safe</strong>. It is built on the <strong>Overwolf platform</strong>, which is officially recognized and approved by Ubisoft for Rainbow Six Siege overlay applications. The app:<ul><li>Does <strong>not</strong> inject code into the game</li><li>Does <strong>not</strong> modify game files or memory</li><li>Only <strong>reads</strong> publicly available match data through the official Ubisoft API</li><li>Complies with Ubisoft\'s <strong>Terms of Service</strong></li></ul>Thousands of players use Overwolf-powered apps daily without any risk of account penalties. The app functions similarly to how the official Ubisoft Stats website works — it simply displays your data in a more accessible format during gameplay.' }
             ];
 
             let html = `<div class="faq-hero"><div class="hero-bg"></div><div class="hero-grid"></div>
@@ -3505,6 +4006,8 @@
         Router.register('profile', (id) => { mhActiveGame = 'all'; mhActiveQueue = 'all'; return renderProfile(id); });
         Router.register('h2h', () => renderH2H());
         Router.register('live', () => renderLive());
+        Router.register('train', () => renderTraining());
+        Router.register('app', () => renderOverwolfApp());
         Router.register('apply', () => renderApply());
         Router.register('faq', () => renderFaq());
 
