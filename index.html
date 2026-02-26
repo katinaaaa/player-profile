@@ -3262,11 +3262,9 @@
         <div class="apply-step-head"><div class="apply-step-num">2</div><div><div class="apply-step-title">Games</div><div class="apply-step-desc">Select your active titles</div></div></div>
         <div class="apply-card">
           <label class="apply-label" style="margin-bottom:10px">Active Games (select all that apply)</label>
-          <div class="apply-checks" id="applyGames">
-            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="cs2">${ICN.crosshair} Counter-Strike 2</label>
-            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="r6">${ICN.shield} Rainbow Six Siege</label>
-            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="val">${ICN.bolt} Valorant</label>
-            <label class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="apex">${ICN.flame} Apex Legends</label>
+           <div class="apply-checks" id="applyGames">
+            <label class="apply-check" onclick="this.classList.toggle('selected');this.querySelector('input').checked=this.classList.contains('selected')"><input type="checkbox" value="cs2">${ICN.crosshair} Counter-Strike 2</label>
+            <label class="apply-check" onclick="this.classList.toggle('selected');this.querySelector('input').checked=this.classList.contains('selected')"><input type="checkbox" value="r6">${ICN.shield} Rainbow Six Siege</label>
           </div>
           <div class="apply-row"><div><label class="apply-label">Primary Game Rank</label><input class="apply-input" id="applyRank" placeholder="e.g. Global Elite, Champion, Radiant"></div><div><label class="apply-label">FaceIt / Tracker Link</label><input class="apply-input" id="applyTracker" placeholder="https://faceit.com/..."></div></div>
         </div>
@@ -3290,15 +3288,82 @@
             const clan = document.getElementById('applyClan').value.trim();
             const region = document.getElementById('applyRegion').value;
             const email = document.getElementById('applyEmail').value.trim();
-            if (!name || !email) {
-                const missing = !name ? 'Gamertag' : 'Email';
-                const el = document.getElementById(!name ? 'applyName' : 'applyEmail');
-                el.style.borderColor = 'var(--red-bright)';
-                el.focus();
-                setTimeout(() => el.style.borderColor = '', 2000);
+            const rank = document.getElementById('applyRank').value.trim();
+            const tracker = document.getElementById('applyTracker').value.trim();
+            const kd = document.getElementById('applyKD').value.trim();
+            const wr = document.getElementById('applyWR').value.trim();
+            const hs = document.getElementById('applyHS').value.trim();
+            const hours = document.getElementById('applyHours').value.trim();
+            const twitter = document.getElementById('applyTwitter').value.trim();
+            const stream = document.getElementById('applyStream').value.trim();
+            const bio = document.getElementById('applyBio').value.trim();
+            const games = [...document.querySelectorAll('#applyGames input:checked')].map(c => c.value).join(', ');
+
+            if (!name || !email || !region || !games || !rank) {
+                const errors = [];
+                const fields = [
+                    { id: 'applyName', val: name, label: 'Gamertag' },
+                    { id: 'applyEmail', val: email, label: 'Email' },
+                    { id: 'applyRegion', val: region, label: 'Region' },
+                    { id: 'applyRank', val: rank, label: 'Primary Rank' }
+                ];
+                fields.forEach(f => {
+                    if (!f.val) {
+                        errors.push(f.label);
+                        const el = document.getElementById(f.id);
+                        el.style.borderColor = 'var(--red-bright)';
+                        setTimeout(() => el.style.borderColor = '', 3000);
+                    }
+                });
+                if (!games) {
+                    errors.push('At least one game');
+                    document.querySelectorAll('.apply-check').forEach(c => {
+                        c.style.borderColor = 'var(--red-bright)';
+                        setTimeout(() => c.style.borderColor = '', 3000);
+                    });
+                }
+                // Show error message
+                let errBanner = document.getElementById('applyError');
+                if (!errBanner) {
+                    errBanner = document.createElement('div');
+                    errBanner.id = 'applyError';
+                    errBanner.style.cssText = 'background:rgba(192,57,43,.1);border:1px solid var(--red-bright);border-radius:6px;padding:12px 16px;margin-bottom:16px;font-family:var(--font-m);font-size:10px;color:var(--red-bright);letter-spacing:.5px';
+                    document.querySelector('.apply-submit').prepend(errBanner);
+                }
+                errBanner.textContent = '⚠ Required: ' + errors.join(', ');
+                setTimeout(() => { if (errBanner) errBanner.remove(); }, 5000);
                 return;
             }
+
             const id = 'VNG-' + Date.now().toString(36).toUpperCase().slice(-6);
+            const subject = encodeURIComponent(`VANGUARD Application — ${name}${clan ? '.' + clan : ''} [${id}]`);
+            const body = encodeURIComponent(
+                `VANGUARD PROFILE APPLICATION\n` +
+                `Reference: ${id}\n` +
+                `────────────────────────\n\n` +
+                `IDENTITY\n` +
+                `  Gamertag: ${name}\n` +
+                `  Clan/Team: ${clan || 'N/A'}\n` +
+                `  Region: ${region || 'N/A'}\n` +
+                `  Email: ${email}\n\n` +
+                `GAMES & RANK\n` +
+                `  Active Games: ${games || 'N/A'}\n` +
+                `  Primary Rank: ${rank || 'N/A'}\n` +
+                `  Tracker Link: ${tracker || 'N/A'}\n\n` +
+                `STATS\n` +
+                `  K/D: ${kd || 'N/A'}\n` +
+                `  Win Rate: ${wr ? wr + '%' : 'N/A'}\n` +
+                `  Headshot %: ${hs ? hs + '%' : 'N/A'}\n` +
+                `  Hours Played: ${hours || 'N/A'}\n\n` +
+                `SOCIALS\n` +
+                `  Twitter/X: ${twitter || 'N/A'}\n` +
+                `  Twitch/YT: ${stream || 'N/A'}\n\n` +
+                `WHY VANGUARD?\n` +
+                `${bio || 'N/A'}\n`
+            );
+
+            window.open(`mailto:sheerazaman90@icloud.com?subject=${subject}&body=${body}`, '_self');
+
             document.getElementById('applyFormArea').innerHTML = `
               <div class="apply-success">
                 <div class="apply-success-icon" style="color:var(--green)">${ICN.check}</div>
