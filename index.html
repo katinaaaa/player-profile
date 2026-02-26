@@ -2992,6 +2992,7 @@
             bars: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="8" width="4" height="12" rx="1"/><rect x="16" y="4" width="4" height="16" rx="1"/></svg>`,
             link: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 13a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1.5 1.5"/><path d="M14 11a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1.5-1.5"/></svg>`,
             check: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/><path d="M8 12l3 3 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            infinity: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-top:-6px"><path d="M12 12c-2-2.67-4-4-6-4a4 4 0 1 0 0 8c2 0 4-1.33 6-4Zm0 0c2 2.67 4 4 6 4a4 4 0 1 0 0-8c-2 0-4 1.33-6 4Z"/></svg>`
         };
 
         // ===== PLAYER DATABASE =====
@@ -3296,7 +3297,7 @@
       <div class="hero-stat"><div class="hero-stat-val">${PLAYERS.length}</div><div class="hero-stat-lbl">Operators</div></div>
       <div class="hero-stat"><div class="hero-stat-val">${onlineCount}</div><div class="hero-stat-lbl">Online Now</div></div>
       <div class="hero-stat"><div class="hero-stat-val">2</div><div class="hero-stat-lbl">Active Games</div></div>
-      <div class="hero-stat"><div class="hero-stat-val">∞</div><div class="hero-stat-lbl">Data Points</div></div>
+      <div class="hero-stat"><div class="hero-stat-val">${ICN.infinity}</div><div class="hero-stat-lbl">Data Points</div></div>
     </div>
     <div class="hero-cta">
       <div class="btn btn-fill" onclick="Router.navigate('#players')">Browse Players</div>
