@@ -21,8 +21,8 @@
             --border: rgba(192, 57, 43, .2);
             --border-bright: rgba(192, 57, 43, .5);
             --text: #e8e8e8;
-            --text-dim: #555;
-            --text-mid: #888;
+            --text-dim: #777;
+            --text-mid: #aaa;
             --white: #fff;
             --nav-h: 52px;
             --max-w: 1100px;
@@ -454,10 +454,6 @@
         .hero-title span {
             color: var(--red-bright);
             text-shadow: 0 0 40px rgba(231, 76, 60, .6)
-        }
-
-        .hero-title:hover {
-            animation: glitch .3s ease
         }
 
         .hero-sub {
@@ -2852,13 +2848,17 @@
         function renderPlayers() {
             return `<div class="section">
     <div class="section-head"><div><div class="section-title">Player <span>Directory</span></div><div class="section-sub">${PLAYERS.length} registered operators</div></div></div>
-    <div class="filter-bar" id="filterBar">
-      <button class="filter-btn active" onclick="filterPlayers('all',this)">All</button>
-      <button class="filter-btn" onclick="filterPlayers('cs2',this)">CS2</button>
-      <button class="filter-btn" onclick="filterPlayers('r6',this)">R6 Siege</button>
-      <button class="filter-btn" onclick="filterPlayers('online',this)">Online</button>
-      <button class="filter-btn" onclick="filterPlayers('eu',this)">EU</button>
-      <button class="filter-btn" onclick="filterPlayers('na',this)">NA</button>
+    <div class="filter-bar" id="filterBar" style="flex-wrap:wrap;gap:6px">
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--text-mid);letter-spacing:2px;margin-right:4px">GAME</span>
+      <button class="filter-btn active" data-group="game" data-filter="all-game" onclick="toggleFilter(this)">All</button>
+      <button class="filter-btn" data-group="game" data-filter="cs2" onclick="toggleFilter(this)">CS2</button>
+      <button class="filter-btn" data-group="game" data-filter="r6" onclick="toggleFilter(this)">R6 Siege</button>
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--text-mid);letter-spacing:2px;margin:0 8px 0 12px;border-left:1px solid var(--border);padding-left:16px">REGION</span>
+      <button class="filter-btn active" data-group="region" data-filter="all-region" onclick="toggleFilter(this)">All</button>
+      <button class="filter-btn" data-group="region" data-filter="eu" onclick="toggleFilter(this)">EU</button>
+      <button class="filter-btn" data-group="region" data-filter="na" onclick="toggleFilter(this)">NA</button>
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--text-mid);letter-spacing:2px;margin:0 8px 0 12px;border-left:1px solid var(--border);padding-left:16px">STATUS</span>
+      <button class="filter-btn" data-group="status" data-filter="online" onclick="toggleFilter(this)">Online</button>
     </div>
     <div class="players-grid" id="playersGrid">${renderPlayerCards(PLAYERS)}</div>
   </div>`;
@@ -2874,14 +2874,69 @@
     </div>`;
             }).join('');
         }
-        function filterPlayers(f, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+        function toggleFilter(btn) {
+            const group = btn.dataset.group;
+            const filter = btn.dataset.filter;
+
+            // If clicking 'All' in a group, deactivate other buttons in that group
+            if (filter.startsWith('all-')) {
+                document.querySelectorAll(`.filter-btn[data-group="${group}"]`).forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            } else {
+                // Deactivate the 'All' button in this group
+                const allBtn = document.querySelector(`.filter-btn[data-filter="all-${group}"]`);
+                if (allBtn) allBtn.classList.remove('active');
+
+                // Toggle this button
+                btn.classList.toggle('active');
+
+                // If nothing active in this group, re-activate 'All'
+                const anyActive = document.querySelector(`.filter-btn[data-group="${group}"].active:not([data-filter^="all-"])`);
+                if (!anyActive && allBtn) allBtn.classList.add('active');
+            }
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            // Collect active filters per group
+            const activeGames = [];
+            const activeRegions = [];
+            let onlineOnly = false;
+
+            document.querySelectorAll('.filter-btn.active').forEach(btn => {
+                const f = btn.dataset.filter;
+                const g = btn.dataset.group;
+                if (g === 'game' && !f.startsWith('all-')) activeGames.push(f);
+                if (g === 'region' && !f.startsWith('all-')) activeRegions.push(f);
+                if (g === 'status' && f === 'online') onlineOnly = true;
+            });
+
             let filtered = PLAYERS;
-            if (f === 'cs2') filtered = PLAYERS.filter(p => p.cs2);
-            else if (f === 'r6') filtered = PLAYERS.filter(p => p.r6);
-            else if (f === 'online') filtered = PLAYERS.filter(p => p.online);
-            else if (f === 'eu') filtered = PLAYERS.filter(p => p.region.toLowerCase().includes('eu'));
-            else if (f === 'na') filtered = PLAYERS.filter(p => p.region.toLowerCase().includes('na'));
+
+            // Game filter
+            if (activeGames.length > 0) {
+                filtered = filtered.filter(p => {
+                    return activeGames.some(g => {
+                        if (g === 'cs2') return !!p.cs2;
+                        if (g === 'r6') return !!p.r6;
+                        return true;
+                    });
+                });
+            }
+
+            // Region filter
+            if (activeRegions.length > 0) {
+                filtered = filtered.filter(p => {
+                    return activeRegions.some(r => p.region.toLowerCase().includes(r));
+                });
+            }
+
+            // Status filter
+            if (onlineOnly) {
+                filtered = filtered.filter(p => p.online);
+            }
+
             document.getElementById('playersGrid').innerHTML = renderPlayerCards(filtered);
         }
 
