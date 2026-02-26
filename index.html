@@ -2830,6 +2830,43 @@
                 display: flex
             }
 
+            .nav-links.mob-show {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: var(--nav-h);
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                border-bottom: 1px solid var(--border);
+                margin: 0;
+                padding: 10px 24px
+            }
+
+            .hero-title {
+                font-size: clamp(40px, 10vw, 84px)
+            }
+
+            .hero-sub {
+                font-size: 10px;
+                letter-spacing: 2px
+            }
+
+            .hero-grid {
+                background-size: 30px 30px
+            }
+
+            .gshead {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 16px
+            }
+
+            .gsrank {
+                text-align: left
+            }
+
             .ovstrip {
                 grid-template-columns: 1fr 1fr
             }
@@ -2874,11 +2911,33 @@
             }
 
             .tierladder {
-                flex-wrap: wrap
+                flex-wrap: wrap;
+                gap: 8px
             }
 
             .tiers {
-                flex: 1 1 calc(33% - 4px)
+                flex: 1 1 calc(50% - 8px)
+            }
+
+            .mh-filters {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px
+            }
+
+            .mh-filter-group {
+                flex-wrap: wrap;
+                justify-content: center
+            }
+
+            .mh-btn {
+                flex: 1;
+                text-align: center
+            }
+
+            .mh-count {
+                margin-left: 0;
+                text-align: center
             }
 
             .profile-content {
@@ -2886,8 +2945,28 @@
             }
 
             .hero-stats {
-                flex-wrap: wrap;
-                gap: 20px
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important
+            }
+
+            .hero-stat {
+                width: auto !important
+            }
+
+            .match {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px
+            }
+
+            .match-result {
+                width: auto
+            }
+
+            .match-time {
+                text-align: left;
+                width: auto
             }
 
             .h2h-row {
@@ -2898,6 +2977,56 @@
 
             .players-grid {
                 grid-template-columns: 1fr
+            }
+
+            .train-grid {
+                grid-template-columns: 1fr
+            }
+
+            .app-features {
+                grid-template-columns: 1fr
+            }
+
+            .apply-req {
+                flex-direction: column
+            }
+
+            .match-map {
+                width: 100%;
+                margin-top: 4px;
+                order: -1
+            }
+
+            .h2h-selector {
+                flex-direction: column;
+                gap: 12px
+            }
+
+            .h2h-pick {
+                width: 100%;
+                min-width: unset
+            }
+
+            .lb-row {
+                grid-template-columns: 40px 1fr 60px 80px;
+                gap: 10px
+            }
+
+            .lb-row .lb-hs {
+                display: none
+            }
+
+            .nav-search.active {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                width: 100%;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+                background: var(--bg-card);
+                padding: 12px 24px
             }
 
             footer {
@@ -3268,8 +3397,8 @@
             document.getElementById('navLinks').innerHTML = NAV_ITEMS.map(n => `<div class="nav-link${active === n.id ? ' active' : ''}" onclick="Router.navigate('#${n.id}')">${n.label}</div>`).join('');
         }
 
-        // ===== SEARCH =====
-        const si = document.getElementById('searchInput'), sd = document.getElementById('searchDropdown');
+        // ===== SEARCH & NAV EVENTS =====
+        const si = document.getElementById('searchInput'), sd = document.getElementById('searchDropdown'), nl = document.getElementById('navLinks');
         si.addEventListener('input', () => {
             const q = si.value.toLowerCase().trim(); if (!q) { sd.classList.remove('active'); return; }
             const res = PLAYERS.filter(p => p.name.toLowerCase().includes(q) || p.clan.toLowerCase().includes(q));
@@ -3277,7 +3406,11 @@
             sd.innerHTML = res.map(p => `<div class="sr-item" onclick="Router.navigate('#profile/${p.id}');sd.classList.remove('active');si.value=''"><div class="sr-avatar">${p.name[0]}</div><div><div class="sr-name">${p.name}${p.verified ? '<span class="pc-verified">✓</span>' : ''}</div><div class="sr-meta">[${p.clan}] · ${p.region}</div></div></div>`).join('');
             sd.classList.add('active');
         });
-        document.addEventListener('click', e => { if (!e.target.closest('.nav-search')) sd.classList.remove('active'); });
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.nav-search')) sd.classList.remove('active');
+            if (!e.target.closest('.mobile-btn') && !e.target.closest('.nav-links')) nl.classList.remove('mob-show');
+            if (e.target.closest('.nav-link')) nl.classList.remove('mob-show');
+        });
         document.addEventListener('keydown', e => { if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); si.focus(); } if (e.key === 'Escape') sd.classList.remove('active'); });
 
         // ===== HELPERS =====
