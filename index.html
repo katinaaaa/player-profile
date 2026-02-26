@@ -3263,8 +3263,8 @@
         <div class="apply-card">
           <label class="apply-label" style="margin-bottom:10px">Active Games (select all that apply)</label>
            <div class="apply-checks" id="applyGames">
-            <label class="apply-check" onclick="this.classList.toggle('selected');this.querySelector('input').checked=this.classList.contains('selected')"><input type="checkbox" value="cs2">${ICN.crosshair} Counter-Strike 2</label>
-            <label class="apply-check" onclick="this.classList.toggle('selected');this.querySelector('input').checked=this.classList.contains('selected')"><input type="checkbox" value="r6">${ICN.shield} Rainbow Six Siege</label>
+            <div class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="cs2">${ICN.crosshair} Counter-Strike 2</div>
+            <div class="apply-check" onclick="this.classList.toggle('selected')"><input type="checkbox" value="r6">${ICN.shield} Rainbow Six Siege</div>
           </div>
           <div class="apply-row"><div><label class="apply-label">Primary Game Rank</label><input class="apply-input" id="applyRank" placeholder="e.g. Global Elite, Champion, Radiant"></div><div><label class="apply-label">FaceIt / Tracker Link</label><input class="apply-input" id="applyTracker" placeholder="https://faceit.com/..."></div></div>
         </div>
@@ -3297,7 +3297,7 @@
             const twitter = document.getElementById('applyTwitter').value.trim();
             const stream = document.getElementById('applyStream').value.trim();
             const bio = document.getElementById('applyBio').value.trim();
-            const games = [...document.querySelectorAll('#applyGames input:checked')].map(c => c.value).join(', ');
+            const games = [...document.querySelectorAll('#applyGames .apply-check.selected input')].map(c => c.value).join(', ');
 
             if (!name || !email || !region || !games || !rank) {
                 const errors = [];
