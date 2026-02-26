@@ -2101,7 +2101,19 @@
         }
 
         .feed-new {
-            animation: pulse 2s infinite
+            animation: feedGlow 2.5s ease forwards
+        }
+
+        @keyframes feedGlow {
+            0% {
+                border-color: var(--red-bright);
+                box-shadow: 0 0 15px rgba(231, 76, 60, .2)
+            }
+
+            100% {
+                border-color: var(--border);
+                box-shadow: none
+            }
         }
 
         /* FILTER BAR */
@@ -3218,6 +3230,8 @@
                 });
                 liveEvents.unshift(ev);
                 if (liveEvents.length > 15) liveEvents.pop();
+                // Remove highlight from previous items
+                feed.querySelectorAll('.feed-new').forEach(el => el.classList.remove('feed-new'));
                 // Animate in new item
                 const newItem = document.createElement('div');
                 newItem.className = 'feed-item feed-new';
