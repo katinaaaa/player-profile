@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+
 *,
 *::before,
 *::after {
@@ -7,38 +9,38 @@
 }
 
 :root {
-    --bg-primary: #08080c;
-    --bg-secondary: #0e0e14;
-    --bg-card: #131318;
-    --bg-card-hover: #18181f;
-    --text-primary: #e2e2ea;
-    --text-secondary: #72728a;
-    --text-muted: #444458;
-    --accent-1: #e8800a;
-    --accent-2: #06b6d4;
-    --accent-glow: rgba(232, 128, 10, 0.2);
-    --cs2-accent: #e8800a;
-    --cs2-accent2: #f59e0b;
-    --cs2-glow: rgba(232, 128, 10, 0.15);
-    --r6-accent: #3b82f6;
-    --r6-accent2: #60a5fa;
-    --r6-glow: rgba(59, 130, 246, 0.15);
-    --border: rgba(255, 255, 255, 0.06);
-    --border-hover: rgba(255, 255, 255, 0.12);
-    --win: #22c55e;
-    --loss: #ef4444;
-    --draw: #eab308;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --radius-xl: 16px;
-    --font-body: 'Inter', sans-serif;
-    --font-display: 'Orbitron', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --bg-primary: #d4d0c8;
+    --bg-secondary: #c0bdb5;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f0f0f0;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --text-muted: #666666;
+    --accent-1: #000080;
+    --accent-2: #000080;
+    --accent-glow: rgba(0, 255, 100, 0.1);
+    --cs2-accent: #000000;
+    --cs2-accent2: #333333;
+    --cs2-glow: rgba(0, 255, 100, 0.08);
+    --r6-accent: #000000;
+    --r6-accent2: #333333;
+    --r6-glow: rgba(0, 255, 100, 0.08);
+    --border: rgba(0, 0, 0, 0.5);
+    --border-hover: rgba(0, 0, 0, 0.8);
+    --win: #007700;
+    --loss: #880000;
+    --draw: #555500;
+    --radius: 0px;
+    --radius-lg: 0px;
+    --radius-xl: 0px;
+    --font-body: 'Share Tech Mono', monospace;
+    --font-display: 'Press Start 2P', monospace;
+    --font-mono: 'Share Tech Mono', monospace;
     --transition: 0.2s ease;
     --transition-fast: 0.12s ease;
-    --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
+    --shadow-sm: 2px 2px 0px #000000;
+    --shadow-md: 3px 3px 0px #000000;
+    --shadow-lg: 4px 4px 0px #000000;
     --nav-h: 56px;
     --max-w: 1200px;
 }
@@ -3143,4 +3145,338 @@ img {
 .lb-row.podium-3 .lb-name span[title] {
     -webkit-text-fill-color: initial;
     color: var(--accent-1);
+}
+
+/* ================================================================
+   RETRO OS / CRT OVERRIDE BLOCK — index.css components
+================================================================ */
+
+/* Auth modal overlay */
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.65) !important;
+    backdrop-filter: none !important
+}
+
+/* Auth modal window */
+.modal-container,
+.auth-container {
+    background: #d4d0c8 !important;
+    border: none !important;
+    border-top: 3px solid #ffffff !important;
+    border-left: 3px solid #ffffff !important;
+    border-right: 3px solid #808080 !important;
+    border-bottom: 3px solid #808080 !important;
+    border-radius: 0 !important;
+    box-shadow: 4px 4px 0 #000 !important
+}
+
+/* Add fake title bar to auth modal */
+.modal-container::before,
+.auth-container::before {
+    content: 'VANGUARD — LOGIN';
+    display: block;
+    background: #000080;
+    color: #ffffff;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+    margin: -2.5rem -2.5rem 1.5rem -2.5rem;
+    letter-spacing: 1px
+}
+
+/* Form inputs — inset retro style */
+.form-input {
+    background: #ffffff !important;
+    border: none !important;
+    border-top: 2px solid #808080 !important;
+    border-left: 2px solid #808080 !important;
+    border-right: 2px solid #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+    border-radius: 0 !important;
+    color: #000 !important;
+    font-family: 'Share Tech Mono', monospace !important
+}
+
+.form-input:focus {
+    border-color: inherit !important;
+    box-shadow: none !important;
+    outline: 2px dotted #000 !important;
+    outline-offset: -2px
+}
+
+/* Auth submit button */
+.auth-btn,
+.submit-btn,
+.form-submit {
+    background: #d4d0c8 !important;
+    color: #000 !important;
+    border: none !important;
+    border-top: 2px solid #fff !important;
+    border-left: 2px solid #fff !important;
+    border-right: 2px solid #808080 !important;
+    border-bottom: 2px solid #808080 !important;
+    border-radius: 0 !important;
+    font-family: 'Share Tech Mono', monospace !important
+}
+
+.auth-btn:active,
+.submit-btn:active {
+    border-top: 2px solid #808080 !important;
+    border-left: 2px solid #808080 !important;
+    border-right: 2px solid #fff !important;
+    border-bottom: 2px solid #fff !important
+}
+
+/* Game cards — retro window style */
+.game-card {
+    background: #ffffff !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 3px 3px 0 #000 !important;
+    overflow: hidden !important
+}
+
+.game-card:hover {
+    box-shadow: 5px 5px 0 #000 !important;
+    transform: translateY(-2px) !important
+}
+
+/* Game card image — desaturate and lighten for retro BW feel */
+.game-card-bg img {
+    filter: grayscale(1) contrast(0.8) brightness(0.5) !important
+}
+
+.game-card-overlay {
+    background: linear-gradient(to top, rgba(212, 208, 200, 0.92) 0%, rgba(212, 208, 200, 0.3) 100%) !important
+}
+
+.game-card-title,
+.game-card-desc,
+.game-card-stat {
+    color: #000 !important;
+    text-shadow: none !important
+}
+
+/* Rank cards */
+.rank-card {
+    background: #ffffff !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 3px 3px 0 #000 !important
+}
+
+.rank-card.primary {
+    background: #000080 !important;
+    color: #ffffff !important
+}
+
+.rank-card.primary * {
+    color: #ffffff !important
+}
+
+/* Stat cards */
+.stat-card {
+    background: #ffffff !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 3px 3px 0 #000 !important
+}
+
+.stat-card::after {
+    display: none !important
+}
+
+.stat-card:hover {
+    box-shadow: 5px 5px 0 #000 !important;
+    transform: translateY(-2px) !important
+}
+
+/* Progress/bar fills */
+.prog-bar,
+.xp-bar,
+.hbar,
+.stat-bar {
+    background: #c0bdb5 !important;
+    border-radius: 0 !important;
+    border: 1px solid #808080 !important
+}
+
+.prog-fill,
+.xp-fill,
+.hbar-fill,
+.stat-fill,
+.bar-fill {
+    background: #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important
+}
+
+/* Settings nav */
+.settings-nav {
+    background: #e8e5de !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important
+}
+
+.settings-nav-item {
+    color: #000 !important;
+    border-radius: 0 !important
+}
+
+.settings-nav-item:hover,
+.settings-nav-item.active {
+    background: #000080 !important;
+    color: #ffffff !important
+}
+
+/* Settings inputs */
+.settings-input,
+.settings-select {
+    background: #ffffff !important;
+    border: none !important;
+    border-top: 2px solid #808080 !important;
+    border-left: 2px solid #808080 !important;
+    border-right: 2px solid #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+    border-radius: 0 !important;
+    color: #000 !important
+}
+
+/* Podium rows — retro style */
+.lb-row.podium-1 {
+    background: #000080 !important;
+    color: #ffffff !important
+}
+
+.lb-row.podium-1 .lb-name {
+    background-image: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    color: #ffffff !important
+}
+
+.lb-row.podium-2 {
+    background: #404040 !important;
+    color: #ffffff !important
+}
+
+.lb-row.podium-2 .lb-name {
+    background-image: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    color: #ffffff !important
+}
+
+.lb-row.podium-3 {
+    background: #808080 !important;
+    color: #ffffff !important
+}
+
+.lb-row.podium-3 .lb-name {
+    background-image: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    color: #ffffff !important
+}
+
+/* Map performance cards */
+.map-card,
+.map-item {
+    background: #ffffff !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 2px 2px 0 #000 !important
+}
+
+/* Match history rows */
+.match-row,
+.match-item {
+    background: #f0f0f0 !important;
+    border: 1px solid #808080 !important;
+    border-radius: 0 !important
+}
+
+.match-row.win,
+.match-item.win {
+    border-left: 4px solid #007700 !important
+}
+
+.match-row.loss,
+.match-item.loss {
+    border-left: 4px solid #880000 !important
+}
+
+/* Remove all remaining dark backgrounds and glows */
+* {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important
+}
+
+/* Subscription / premium section */
+.sub-card,
+.premium-card {
+    background: #ffffff !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 3px 3px 0 #000 !important
+}
+
+.sub-card.featured,
+.premium-card.featured {
+    background: #000080 !important;
+    color: #ffffff !important;
+    border: 2px solid #000 !important
+}
+
+.sub-card.featured *,
+.premium-card.featured * {
+    color: #ffffff !important
+}
+
+/* Tabs */
+.tab,
+.tab-btn,
+.selector-btn {
+    background: #d4d0c8 !important;
+    color: #000 !important;
+    border: none !important;
+    border-top: 2px solid #fff !important;
+    border-left: 2px solid #fff !important;
+    border-right: 2px solid #808080 !important;
+    border-bottom: 2px solid #808080 !important;
+    border-radius: 0 !important
+}
+
+.tab.active,
+.tab-btn.active,
+.selector-btn.active {
+    background: #000080 !important;
+    color: #fff !important;
+    border-top: 2px solid #808080 !important;
+    border-left: 2px solid #808080 !important;
+    border-right: 2px solid #fff !important;
+    border-bottom: 2px solid #fff !important
+}
+
+/* Remove remaining colored accents */
+.cs2-accent-text { color: #000 !important }
+.r6-accent-text { color: #000 !important }
+
+/* Toast notifications */
+.toast,
+.notification {
+    background: #d4d0c8 !important;
+    border: 2px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 3px 3px 0 #000 !important;
+    color: #000 !important
+}
+
+/* VT323 for large stat numbers throughout */
+.stat-val,
+.stat-value,
+.stat-number,
+.big-stat,
+.kd-number,
+.rating-number {
+    font-family: 'VT323', monospace !important;
+    font-size: 2.4rem !important;
+    line-height: 1 !important
 }
